@@ -1,3 +1,1437 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>BottomScreenr v10 Intelligence</title>
-<script>location.replace(/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'mobile.html':'desktop.html')</script></head>
-<body style="font-family:system-ui;padding:24px"><p>Membuka dashboard... Jika tidak berpindah: <a href="desktop.html">versi desktop</a> &middot; <a href="mobile.html">versi mobile</a> &middot; <a href="deck.html">Executive Presentation Deck (16:9)</a>.</p></body></html>
+<!doctype html>
+<html lang="id" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BottomScreenr Intelligence (BSI) · Quantitative &amp; On-Chain Research</title>
+<meta name="description" content="Firma Intelijen Kuantitatif &amp; Riset On-Chain Independen. Analisis pembalikan dasar (base-reversal), deteksi akumulasi paus, dan audit risiko dilusi pasokan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #070B14;
+  --bg-card: #0D1424;
+  --bg-card-hover: #131E35;
+  --bg-card-sub: #10192D;
+  --line: #1F2E4D;
+  --line-strong: #2E4575;
+  
+  --text-main: #F8FAFC;
+  --text-dim: #94A3B8;
+  --text-muted: #64748B;
+  
+  --blue-brand: #2563EB;
+  --blue-bright: #38BDF8;
+  --blue-glow: rgba(56, 189, 248, 0.15);
+  
+  --emerald: #10B981;
+  --emerald-dim: rgba(16, 185, 129, 0.15);
+  --amber: #F59E0B;
+  --amber-dim: rgba(245, 158, 11, 0.15);
+  --crimson: #EF4444;
+  --crimson-dim: rgba(239, 68, 68, 0.15);
+  
+  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* Utility typography */
+.font-mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.font-bold { font-weight: 700; }
+.text-left { text-align: left!important; }
+.text-muted { color: var(--text-muted); }
+.text-dim { color: var(--text-dim); }
+.text-up { color: var(--emerald); }
+.text-brand { color: var(--blue-bright); }
+.text-sm { font-size: 13px; }
+
+/* Header & Global Ticker */
+header.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(7, 11, 20, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-logo-icon {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, #1E40AF 0%, #38BDF8 100%);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+}
+.brand-name {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brand-badge {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--blue-glow);
+  color: var(--blue-bright);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  font-weight: 600;
+}
+
+.ticker-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+.ticker-item b { color: var(--text-main); margin-left: 3px; }
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--emerald);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--emerald);
+  display: inline-block;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-nav-outline {
+  border: 1px solid var(--line);
+  background: var(--bg-card);
+  color: var(--text-main);
+  padding: 7px 14px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-nav-outline:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--text-dim);
+}
+.btn-nav-primary {
+  background: #2563EB;
+  color: #fff;
+  padding: 7px 16px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.4);
+}
+.btn-nav-primary:hover {
+  background: #1D4ED8;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.6);
+}
+
+/* Hero Section */
+.hero-sec {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 72px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.hero-bg-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.15) 0%, rgba(7, 11, 20, 0) 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+.hero-eyebrow {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue-bright);
+  margin-bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--blue-glow);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 4px 14px;
+  border-radius: 999px;
+}
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.16;
+  letter-spacing: -0.03em;
+  max-width: 980px;
+  margin-bottom: 20px;
+  color: #FFFFFF;
+}
+.hero-title span {
+  background: linear-gradient(135deg, #FFFFFF 30%, #93C5FD 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-sub {
+  font-size: 18px;
+  color: var(--text-dim);
+  max-width: 820px;
+  line-height: 1.55;
+  margin-bottom: 36px;
+}
+
+/* Hero Live Metrics Ribbon */
+.metrics-ribbon {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 1240px;
+  margin: 32px 0 20px;
+}
+.m-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform .2s, border-color .2s;
+}
+.m-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--blue-bright);
+}
+.m-val {
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
+  font-family: var(--font-mono);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.m-lbl {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.m-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* Section Wrappers */
+section.section-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.sec-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue-bright);
+  margin-bottom: 4px;
+}
+.sec-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.sec-desc {
+  font-size: 15px;
+  color: var(--text-dim);
+  max-width: 640px;
+  margin-top: 6px;
+}
+
+/* Featured Spotlight Card (Executive Deck 16:9) */
+.spotlight-card {
+  background: radial-gradient(circle at 85% 15%, #182848 0%, #0D1424 70%);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  padding: 36px 40px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 36px;
+  align-items: center;
+}
+.spotlight-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(56, 189, 248, 0.2);
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+.spotlight-title {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.spotlight-governing {
+  font-size: 16px;
+  line-height: 1.55;
+  color: #CBD5E1;
+  margin-bottom: 24px;
+  border-left: 3px solid var(--blue-bright);
+  padding-left: 16px;
+}
+.spotlight-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.tag-chip {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.spotlight-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.btn-launch-deck {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.5);
+  transition: all .2s;
+}
+.btn-launch-deck:hover {
+  background: #1E40AF;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(37, 99, 235, 0.7);
+}
+
+.preview-mockup {
+  background: #0B101D;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+.mockup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+.mockup-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+.mockup-b-item {
+  display: flex;
+  gap: 10px;
+  color: #E2E8F0;
+}
+.mockup-b-item b { color: #38BDF8; font-weight: 600; min-width: 65px; }
+
+/* Intelligence Repository (Tab Filter & Cards) */
+.tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+.tab-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .2s;
+}
+.tab-btn:hover { color: #fff; background: var(--bg-card); }
+.tab-btn.active {
+  background: var(--bg-card);
+  border-color: var(--line-strong);
+  color: #38BDF8;
+}
+
+.rep-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+.rep-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all .2s;
+}
+.rep-card:hover {
+  border-color: var(--blue-bright);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+.rep-type {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--blue-bright);
+  margin-bottom: 8px;
+}
+.rep-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.rep-desc {
+  font-size: 13.5px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin-bottom: 18px;
+  flex-grow: 1;
+}
+.rep-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  font-size: 12.5px;
+}
+.rep-link {
+  color: var(--blue-bright);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.rep-link:hover { text-decoration: underline; }
+
+/* 4-Pillar Quantitative Funnel */
+.funnel-container {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 32px 36px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+.funnel-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.f-bar {
+  height: 48px;
+  border-radius: 8px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #fff;
+  transition: width .3s;
+}
+
+/* Contender Radar Table */
+.table-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.table-tools {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.search-input {
+  background: var(--bg-dark);
+  border: 1px solid var(--line);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  width: 280px;
+}
+.search-input:focus { outline: none; border-color: var(--blue-bright); }
+
+table.radar-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  text-align: right;
+}
+table.radar-table th {
+  background: var(--bg-card-sub);
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+table.radar-table th.text-left { text-align: left; }
+table.radar-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  color: #E2E8F0;
+}
+table.radar-table tr:hover td {
+  background: var(--bg-card-hover);
+}
+.coin-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rank-num { color: var(--text-muted); font-size: 12px; min-width: 22px; }
+.coin-sym { font-size: 15px; color: #fff; }
+.coin-name { font-size: 11.5px; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.b-challenger { background: var(--emerald-dim); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
+.b-research { background: rgba(99, 102, 241, 0.15); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.3); }
+.btn-table {
+  background: var(--bg-card-sub);
+  border: 1px solid var(--line);
+  color: var(--blue-bright);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all .15s;
+}
+.btn-table:hover { background: #2563EB; color: #fff; border-color: #2563EB; }
+
+/* Governance & Methodology Section */
+.gov-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.gov-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 24px;
+}
+.gov-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--blue-glow);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--blue-bright);
+  margin-bottom: 14px;
+}
+.gov-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.gov-text { font-size: 13.5px; color: var(--text-dim); line-height: 1.55; }
+
+/* Footer */
+footer.site-foot {
+  border-top: 1px solid var(--line);
+  background: #04070D;
+  padding: 48px 24px 36px;
+  margin-top: 60px;
+}
+.foot-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.foot-col { max-width: 380px; }
+.foot-col h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+.foot-col p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.foot-links { list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--text-dim); }
+.foot-links a:hover { color: #fff; text-decoration: underline; }
+.foot-bottom {
+  max-width: 1400px;
+  margin: 36px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (max-width: 1024px) {
+  .metrics-ribbon { grid-template-columns: repeat(3, 1fr); }
+  .spotlight-card { grid-template-columns: 1fr; }
+  .funnel-container { grid-template-columns: 1fr; }
+  .gov-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .hero-title { font-size: 32px; }
+  .metrics-ribbon { grid-template-columns: repeat(2, 1fr); }
+  .nav-inner { flex-direction: column; align-items: flex-start; }
+  .nav-actions { width: 100%; justify-content: space-between; }
+}
+</style>
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<header class="top-nav">
+  <div class="nav-inner">
+    <div class="brand-wrap">
+      <div class="brand-logo-icon">B</div>
+      <div>
+        <div class="brand-name">
+          BottomScreenr Intelligence
+          <span class="brand-badge">Quant Authority</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="ticker-pill">
+      <span class="live-dot"></span>
+      <span class="ticker-item">BTC Dom: <b>58.4%</b></span>
+      <span class="ticker-item">MVRV: <b>2.05</b></span>
+      <span class="ticker-item">Cycle: <b>MID_CYCLE</b></span>
+      <span class="ticker-item">Status: <b style="color:var(--blue-bright)">Selective Base</b></span>
+    </div>
+    
+    <div class="nav-actions">
+      <a href="deck.html" class="btn-nav-outline" title="Buka Executive Presentation Deck 16:9">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Executive Deck (16:9)
+      </a>
+      <a href="desktop.html" class="btn-nav-primary" title="Akses Quantitative Screener Workstation">
+        Launch Terminal &rarr;
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<div class="hero-sec">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-eyebrow">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    Deterministic On-Chain Forensics &amp; Quantitative Base-Reversal Research
+  </div>
+  <h1 class="hero-title">
+    Institutional Intelligence for<br>
+    <span>Digital Asset Allocators &amp; Quants</span>
+  </h1>
+  <p class="hero-sub">
+    Mengeliminasi kebisingan spekulatif, false breakout, dan risiko dilusi vesting tersembunyi melalui metodologi deterministik 4 pilar. Menyaring 300+ universe aset digital untuk mengisolasi klaster akumulasi dasar paling asimetris.
+  </p>
+  
+  <!-- Metrics Ribbon -->
+  <div class="metrics-ribbon">
+    <div class="m-card">
+      <div class="m-val">220</div>
+      <div class="m-lbl">Tracked Universe</div>
+      <div class="m-sub">Top-300+ Likuiditas CEX &amp; DEX</div>
+    </div>
+    <div class="m-card">
+      <div class="m-val">136</div>
+      <div class="m-lbl">Whale Monitored</div>
+      <div class="m-sub">Entitas On-Chain Terverifikasi</div>
+    </div>
+    <div class="m-card">
+      <div class="m-val" style="color:var(--emerald)">4</div>
+      <div class="m-lbl">Challenger Assets</div>
+      <div class="m-sub">BMS &gt; 78 &amp; Akumulasi Matang</div>
+    </div>
+    <div class="m-card">
+      <div class="m-val">30</div>
+      <div class="m-lbl">Near-PRIME Candidates</div>
+      <div class="m-sub">Tertahan 1 Syarat Teknis</div>
+    </div>
+    <div class="m-card">
+      <div class="m-val" style="color:var(--blue-bright)">100%</div>
+      <div class="m-lbl">Deterministic</div>
+      <div class="m-sub">Kepatuhan &amp; Isolasi Publik</div>
+    </div>
+  </div>
+</div>
+
+<!-- Featured Research Spotlight -->
+<section class="section-wrap" id="featured">
+  <div class="section-header">
+    <div>
+      <div class="sec-eyebrow">Featured Research Release</div>
+      <h2 class="sec-title">Executive Presentation Deck (16:9 Canvas)</h2>
+      <p class="sec-desc">Laporan sintesis bergaya konsultan strategi tier-1 (McKinsey, BCG) mengadopsi Prinsip Piramida Minto untuk komite investasi institusional.</p>
+    </div>
+    <div>
+      <a href="deck.html" class="btn-nav-outline">Buka Fullscreen (F) &rarr;</a>
+    </div>
+  </div>
+  
+  <div class="spotlight-card">
+    <div>
+      <span class="spotlight-badge">
+        <span class="live-dot"></span>
+        Updated Edition · 2026-10-17
+      </span>
+      <h3 class="spotlight-title">Institutional Asset Screening: Challengers &amp; Silent Accumulation</h3>
+      <div class="spotlight-governing">
+        <b>The Governing Thought:</b> Pasar berada di fase konsolidasi selektif (MID_CYCLE); kelompok Challenger menunjukkan akumulasi senyap paus tertahan 1 syarat teknis menuju status PRIME.
+      </div>
+      <div class="spotlight-tags">
+        <span class="tag-chip">10-Slide Deck</span>
+        <span class="tag-chip">16:9 Responsive Stage</span>
+        <span class="tag-chip">4-Pillar Screening Waterfall</span>
+        <span class="tag-chip">90-Day Unlock Heatmap</span>
+        <span class="tag-chip">Gap Analysis Catalog</span>
+      </div>
+      <div class="spotlight-actions">
+        <a href="deck.html" class="btn-launch-deck">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Buka Interactive 16:9 Deck
+        </a>
+        <a href="#radar" class="btn-nav-outline" style="padding:12px 18px;font-size:14.5px">
+          Lihat Matriks Kandidat &darr;
+        </a>
+      </div>
+    </div>
+    
+    <div class="preview-mockup">
+      <div class="mockup-header">
+        <span>EXECUTIVE DECK PREVIEW</span>
+        <span class="font-mono">16:9 CANVAS · FITSTAGE()</span>
+      </div>
+      <div class="mockup-bullets">
+        <div class="mockup-b-item">
+          <b>SLIDE 1-3</b>
+          <span>Executive Synthesis &amp; Macro Waterfall (Screening dari 326 ke 20 koin).</span>
+        </div>
+        <div class="mockup-b-item">
+          <b>SLIDE 4</b>
+          <span>Contender Matrix: Peringkat lengkap BMS, Setup, dan Whale Evidence.</span>
+        </div>
+        <div class="mockup-b-item">
+          <b>SLIDE 5-7</b>
+          <span>Deep Dive Asset: NEXO (BMS 92.2), SFP (BMS 80.4, ES 51.9), VIRTUAL.</span>
+        </div>
+        <div class="mockup-b-item">
+          <b>SLIDE 8-10</b>
+          <span>Supply Dilution Risk, Gap Analysis, dan Execution Invalidation Rules.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Intelligence Repository -->
+<section class="section-wrap" id="repository">
+  <div class="section-header">
+    <div>
+      <div class="sec-eyebrow">Research &amp; Terminal Catalog</div>
+      <h2 class="sec-title">Kumpulan Laporan &amp; Alat Analisis</h2>
+      <p class="sec-desc">Akses seluruh publikasi riset, workstation kuantitatif harian, dan model spreadsheet.</p>
+    </div>
+  </div>
+  
+  <!-- Tabs Bar -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="filterCat('all', this)">Semua Publikasi (8)</button>
+    <button class="tab-btn" onclick="filterCat('deck', this)">Executive Decks (16:9)</button>
+    <button class="tab-btn" onclick="filterCat('terminal', this)">Screener Terminal</button>
+    <button class="tab-btn" onclick="filterCat('macro', this)">Macro &amp; Cycle</button>
+    <button class="tab-btn" onclick="filterCat('dossier', this)">Asset Dossiers</button>
+  </div>
+  
+  <div class="rep-grid" id="rep-grid">
+    <!-- Card 1 -->
+    <div class="rep-card" data-cat="deck">
+      <div>
+        <div class="rep-type">Executive Presentation Deck · 16:9 Canvas</div>
+        <h3 class="rep-title">Laporan Eksekutif Challenger &amp; Near-PRIME</h3>
+        <p class="rep-desc">Deck presentasi interaktif standar konsultan tier-1 (McKinsey, BCG) dengan scaling otomatis, navigasi keyboard, dan navigasi corong 4 pilar kuantitatif.</p>
+      </div>
+      <div class="rep-footer">
+        <span class="text-muted font-mono">Format: HTML 16:9</span>
+        <a href="deck.html" class="rep-link">Buka Presentasi &rarr;</a>
+      </div>
+    </div>
+    
+    <!-- Card 2 -->
+    <div class="rep-card" data-cat="terminal">
+      <div>
+        <div class="rep-type">Quantitative Terminal · Desktop Edition</div>
+        <h3 class="rep-title">Workstation Riset Kuantitatif Universe (300+ Aset)</h3>
+        <p class="rep-desc">Terminal analitik multi-kolom komprehensif mencakup Base Market Structure (BMS), Setup Score (SS), Evidence Score (ES), chart histori, dan backtest.</p>
+      </div>
+      <div class="rep-footer">
+        <span class="text-muted font-mono">Format: Web Workstation</span>
+        <a href="desktop.html" class="rep-link">Akses Terminal &rarr;</a>
+      </div>
+    </div>
+    
+    <!-- Card 3 -->
+    <div class="rep-card" data-cat="terminal">
+      <div>
+        <div class="rep-type">Mobile Intelligence · Field Edition</div>
+        <h3 class="rep-title">Screener Sentuh Cepat &amp; Whale Alert Feed</h3>
+        <p class="rep-desc">Antarmuka ringan dioptimalkan untuk perangkat seluler cerdas guna memantau trigger teknikal C1/E1 dan notifikasi akumulasi paus harian.</p>
+      </div>
+      <div class="rep-footer">
+        <span class="text-muted font-mono">Format: Mobile Web</span>
+        <a href="mobile.html" class="rep-link">Akses Mobile &rarr;</a>
+      </div>
+    </div>
+    
+    <!-- Card 4 -->
+    <div class="rep-card" data-cat="macro">
+      <div>
+        <div class="rep-type">Macro &amp; Cycle Intelligence</div>
+        <h3 class="rep-title">Monitor Siklus Makro: BTC Dom, MVRV &amp; Rezim Likuiditas</h3>
+        <p class="rep-desc">Analisis dinamika penyerapan likuiditas Bitcoin vs Altcoins, sentimen Fear &amp; Greed, serta pemetaan transisi fase P1 hingga P4.</p>
+      </div>
+      <div class="rep-footer">
+        <span class="text-muted font-mono">Regime: MID_CYCLE</span>
+        <a href="desktop.html#makro" class="rep-link">Buka Analisis &rarr;</a>
+      </div>
+    </div>
+    
+    <!-- Card 5 -->
+    <div class="rep-card" data-cat="dossier">
+      <div>
+        <div class="rep-type">Single-Asset Dossier · Challenger</div>
+        <h3 class="rep-title">NEXO: Konsolidasi 180+ Hari &amp; Drain Pasokan Bursa</h3>
+        <p class="rep-desc">Skor BMS 92.2 dan Setup 79.8. Rekam jejak konsolidasi dasar matang dengan rasio dilusi unlock 90 hari 0% (bebas risiko emisi).</p>
+      </div>
+      <div class="rep-footer">
+        <span class="text-muted font-mono">BMS: 92.2 · SS: 79.8</span>
+        <a href="deck.html" class="rep-link">Lihat Deep Dive &rarr;</a>
+      </div>
+    </div>
+    
+    <!-- Card 6 -->
+    <div class="rep-card" data-cat="dossier">
+      <div>
+        <div class="rep-type">Single-Asset Dossier · Research</div>
+        <h3 class="rep-title">SafePal (SFP): Kompresi Siklus Hardware Wallet</h3>
+        <p class="rep-desc">Skor BMS 80.4 dan bukti akumulasi on-chain paus (ES 51.9 terverifikasi). Tiga kali retest support dasar tanpa breakdown.</p>
+      </div>
+      <div class="rep-footer">
+        <span class="text-muted font-mono">BMS: 80.4 · ES: 51.9</span>
+        <a href="deck.html" class="rep-link">Lihat Deep Dive &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4-Pillar Quantitative Funnel -->
+<section class="section-wrap" id="methodology">
+  <div class="section-header">
+    <div>
+      <div class="sec-eyebrow">Quantitative Screening Discipline</div>
+      <h2 class="sec-title">Metodologi Penyaringan 4 Pilar</h2>
+      <p class="sec-desc">Proses eliminasi matematis berlapis untuk menyingkirkan jebakan likuiditas dan memastikan hanya aset berkonveksitas tinggi yang lolos.</p>
+    </div>
+  </div>
+  
+  <div class="funnel-container">
+    <div class="funnel-bars">
+      <div class="f-bar" style="width:100%;background:#1E293B;border:1px solid var(--line)">
+        <span><b>Universe Screening:</b> Top-300+ Likuiditas &amp; Market Cap</span>
+        <b class="font-mono">220 Koin (100%)</b>
+      </div>
+      <div class="f-bar" style="width:70%;background:#1E3A8A">
+        <span><b>Pilar 1 - Base Maturity:</b> BMS &ge; 70 (Konsolidasi &gt; 80 Hari)</span>
+        <b class="font-mono">84 Koin (42%)</b>
+      </div>
+      <div class="f-bar" style="width:45%;background:#1D4ED8">
+        <span><b>Pilar 2 - Setup Quality:</b> Setup Score (SS) &ge; 70 &amp; Retests &ge; 2</span>
+        <b class="font-mono">38 Koin (19%)</b>
+      </div>
+      <div class="f-bar" style="width:28%;background:#047857">
+        <span><b>Pilar 3 - Smart-Money:</b> Whale Outflow CEX / ES &ge; 40</span>
+        <b class="font-mono">78 Koin (7.4%)</b>
+      </div>
+      <div class="f-bar" style="width:16%;background:var(--emerald);box-shadow:0 0 16px rgba(16,185,129,0.4)">
+        <span><b>Target Output:</b> CHALLENGERS &amp; Near-PRIME</span>
+        <b class="font-mono">30 Koin (6.1%)</b>
+      </div>
+    </div>
+    
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="gov-card" style="padding:18px">
+        <div class="font-bold text-up" style="font-size:14px;margin-bottom:4px">1. Mengeliminasi Risiko 'Falling Knife'</div>
+        <p class="text-sm text-dim">Lebih dari separuh aset di pasar kripto berada di tren penurunan berkelanjutan. Syarat BMS &ge; 70 memastikan penjual telah terdisipasi penuh sebelum modal dipertaruhkan.</p>
+      </div>
+      <div class="gov-card" style="padding:18px">
+        <div class="font-bold text-brand" style="font-size:14px;margin-bottom:4px">2. Audit Dilusi Vesting 90 Hari</div>
+        <p class="text-sm text-dim">Jadwal pembukaan token investor awal di atas 10% langsung diberi sanksi risiko untuk melindungi alokator dari banjir pasokan buatan.</p>
+      </div>
+      <div class="gov-card" style="padding:18px">
+        <div class="font-bold" style="font-size:14px;margin-bottom:4px;color:#F59E0B">3. Rasio Asimetri Risiko vs Hasil</div>
+        <p class="text-sm text-dim">Stop level ditentukan persis 2–3% di bawah batas bawah konsolidasi horizontal, menciptakan profil risiko sangat ketat (&lt;10%) dengan potensi ekspansi siklus berlipat.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Live Market Snapshot / Contender Radar -->
+<section class="section-wrap" id="radar">
+  <div class="section-header">
+    <div>
+      <div class="sec-eyebrow">Live Radar Table</div>
+      <h2 class="sec-title">Matriks Kandidat Near-PRIME &amp; Challenger</h2>
+      <p class="sec-desc">Aset terkualifikasi yang berhasil melewati gerbang pembentukan struktur dasar (BMS &ge; 70) diurutkan berdasarkan kedewasaan setup.</p>
+    </div>
+    <div>
+      <input type="text" class="search-input" id="radarSearch" placeholder="Cari ticker (misal: SFP, NEXO)..." onkeyup="filterRadar()">
+    </div>
+  </div>
+  
+  <div class="table-wrap">
+    <table class="radar-table" id="radarTable">
+      <thead>
+        <tr>
+          <th class="text-left">Aset (Ticker)</th>
+          <th>Status</th>
+          <th>Harga Saat Ini</th>
+          <th>Est. MCap</th>
+          <th>BMS</th>
+          <th>Setup (SS)</th>
+          <th>Whale (ES)</th>
+          <th>Base</th>
+          <th>Unlock 90D</th>
+          <th class="text-left">Hambatan Menuju PRIME</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr data-symbol="bgb" data-name="bitget token">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#1</span>
+              <div>
+                <b class="coin-sym">BGB</b>
+                <div class="coin-name text-muted">Bitget Token</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$1.8800</td>
+          <td class="font-mono text-muted">$1.32B</td>
+          <td class="font-mono"><span class="score-bms">95.3</span></td>
+          <td class="font-mono font-bold text-up">75.8</td>
+          <td class="font-mono">41.1</td>
+          <td class="font-mono">180d</td>
+          <td class="font-mono">0.0%</td>
+          <td class="text-left text-sm text-dim">ES kurang 29 poin, fase 3-4 belum terverifikasi whale</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+        <tr data-symbol="shib" data-name="shiba inu">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#2</span>
+              <div>
+                <b class="coin-sym">SHIB</b>
+                <div class="coin-name text-muted">Shiba Inu</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$0.0000</td>
+          <td class="font-mono text-muted">$2.93B</td>
+          <td class="font-mono"><span class="score-bms">92.7</span></td>
+          <td class="font-mono font-bold text-up">73.5</td>
+          <td class="font-mono">41.3</td>
+          <td class="font-mono">119d</td>
+          <td class="font-mono">0.0%</td>
+          <td class="text-left text-sm text-dim">SS kurang 2 poin, ES kurang 29 poin, fase 3-4 belum terverifikasi whale</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+        <tr data-symbol="nexo" data-name="nexo">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#3</span>
+              <div>
+                <b class="coin-sym">NEXO</b>
+                <div class="coin-name text-muted">NEXO</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$0.8073</td>
+          <td class="font-mono text-muted">$807.28M</td>
+          <td class="font-mono"><span class="score-bms">91.6</span></td>
+          <td class="font-mono font-bold text-up">79.4</td>
+          <td class="font-mono">45.4</td>
+          <td class="font-mono">180d</td>
+          <td class="font-mono">1.3%</td>
+          <td class="text-left text-sm text-dim">ES kurang 25 poin</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+        <tr data-symbol="aster" data-name="aster">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#4</span>
+              <div>
+                <b class="coin-sym">ASTER</b>
+                <div class="coin-name text-muted">Aster</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$0.7011</td>
+          <td class="font-mono text-muted">$1.90B</td>
+          <td class="font-mono"><span class="score-bms">90.4</span></td>
+          <td class="font-mono font-bold text-up">76.1</td>
+          <td class="font-mono">40.1</td>
+          <td class="font-mono">180d</td>
+          <td class="font-mono">2.8%</td>
+          <td class="text-left text-sm text-dim">ES kurang 30 poin, fase 3-4 belum terverifikasi whale</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+        <tr data-symbol="htx" data-name="htx dao">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#5</span>
+              <div>
+                <b class="coin-sym">HTX</b>
+                <div class="coin-name text-muted">HTX DAO</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$0.0000</td>
+          <td class="font-mono text-muted">$1.48B</td>
+          <td class="font-mono"><span class="score-bms">86.2</span></td>
+          <td class="font-mono font-bold text-up">81.6</td>
+          <td class="font-mono">39.3</td>
+          <td class="font-mono">180d</td>
+          <td class="font-mono"><span class="text-muted">Clean (0%)</span></td>
+          <td class="text-left text-sm text-dim">ES kurang 31 poin, fase 3-4 belum terverifikasi whale, unlock 90D belum terverifikasi</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+        <tr data-symbol="pol" data-name="pol (ex-matic)">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#6</span>
+              <div>
+                <b class="coin-sym">POL</b>
+                <div class="coin-name text-muted">POL (ex-MATIC)</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$0.0924</td>
+          <td class="font-mono text-muted">$982.84M</td>
+          <td class="font-mono"><span class="score-bms">85.4</span></td>
+          <td class="font-mono font-bold text-up">72.8</td>
+          <td class="font-mono">48.5</td>
+          <td class="font-mono">98d</td>
+          <td class="font-mono">51.4%</td>
+          <td class="text-left text-sm text-dim">SS kurang 2 poin, ES kurang 21 poin</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+        <tr data-symbol="floki" data-name="floki">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#7</span>
+              <div>
+                <b class="coin-sym">FLOKI</b>
+                <div class="coin-name text-muted">FLOKI</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$0.0000</td>
+          <td class="font-mono text-muted">$226.70M</td>
+          <td class="font-mono"><span class="score-bms">84.0</span></td>
+          <td class="font-mono font-bold text-up">74.7</td>
+          <td class="font-mono">44.6</td>
+          <td class="font-mono">111d</td>
+          <td class="font-mono"><span class="text-muted">Clean (0%)</span></td>
+          <td class="text-left text-sm text-dim">SS kurang 0 poin, ES kurang 25 poin, fase 3-4 belum terverifikasi whale, unlock 90D belum terverifikasi</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+        <tr data-symbol="btt" data-name="bittorrent">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#8</span>
+              <div>
+                <b class="coin-sym">BTT</b>
+                <div class="coin-name text-muted">BitTorrent</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$0.0000</td>
+          <td class="font-mono text-muted">$342.59M</td>
+          <td class="font-mono"><span class="score-bms">83.9</span></td>
+          <td class="font-mono font-bold text-up">74.3</td>
+          <td class="font-mono">32.3</td>
+          <td class="font-mono">155d</td>
+          <td class="font-mono">9.9%</td>
+          <td class="text-left text-sm text-dim">SS kurang 1 poin, ES kurang 38 poin, fase 3-4 belum terverifikasi whale</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+        <tr data-symbol="glm" data-name="golem">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#9</span>
+              <div>
+                <b class="coin-sym">GLM</b>
+                <div class="coin-name text-muted">Golem</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$0.1133</td>
+          <td class="font-mono text-muted">$113.33M</td>
+          <td class="font-mono"><span class="score-bms">83.8</span></td>
+          <td class="font-mono font-bold text-up">71.8</td>
+          <td class="font-mono">43.5</td>
+          <td class="font-mono">105d</td>
+          <td class="font-mono">0.1%</td>
+          <td class="text-left text-sm text-dim">SS kurang 3 poin, ES kurang 27 poin</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+        <tr data-symbol="1inch" data-name="1inch">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#10</span>
+              <div>
+                <b class="coin-sym">1INCH</b>
+                <div class="coin-name text-muted">1INCH</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$0.0920</td>
+          <td class="font-mono text-muted">$129.33M</td>
+          <td class="font-mono"><span class="score-bms">83.6</span></td>
+          <td class="font-mono font-bold text-up">73.5</td>
+          <td class="font-mono">38.1</td>
+          <td class="font-mono">86d</td>
+          <td class="font-mono">48.7%</td>
+          <td class="text-left text-sm text-dim">SS kurang 1 poin, ES kurang 32 poin, fase 3-4 belum terverifikasi whale</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+        <tr data-symbol="virtual" data-name="virtuals protocol">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#11</span>
+              <div>
+                <b class="coin-sym">VIRTUAL</b>
+                <div class="coin-name text-muted">Virtuals Protocol</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$0.6537</td>
+          <td class="font-mono text-muted">$430.36M</td>
+          <td class="font-mono"><span class="score-bms">83.3</span></td>
+          <td class="font-mono font-bold text-up">76.3</td>
+          <td class="font-mono">48.9</td>
+          <td class="font-mono">80d</td>
+          <td class="font-mono">0.0%</td>
+          <td class="text-left text-sm text-dim">ES kurang 21 poin</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+        <tr data-symbol="sfp" data-name="safepal">
+          <td class="font-mono text-left">
+            <div class="coin-cell">
+              <span class="rank-num">#12</span>
+              <div>
+                <b class="coin-sym">SFP</b>
+                <div class="coin-name text-muted">SafePal</div>
+              </div>
+            </div>
+          </td>
+          <td><span class='badge b-research'>RESEARCH</span></td>
+          <td class="font-mono font-bold">$0.2485</td>
+          <td class="font-mono text-muted">$124.25M</td>
+          <td class="font-mono"><span class="score-bms">82.4</span></td>
+          <td class="font-mono font-bold text-up">78.4</td>
+          <td class="font-mono">51.1</td>
+          <td class="font-mono">85d</td>
+          <td class="font-mono">0.9%</td>
+          <td class="text-left text-sm text-dim">ES kurang 19 poin</td>
+          <td>
+            <a href="deck.html" class="btn-table">Analisa &rarr;</a>
+          </td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Corporate Governance & Methodology -->
+<section class="section-wrap" id="governance">
+  <div class="section-header">
+    <div>
+      <div class="sec-eyebrow">Institutional Standards</div>
+      <h2 class="sec-title">Tata Kelola Riset &amp; Kepatuhan Publik</h2>
+      <p class="sec-desc">Prinsip integritas yang menjamin independensi dan akurasi analisis kuantitatif kami.</p>
+    </div>
+  </div>
+  
+  <div class="gov-grid">
+    <div class="gov-card">
+      <div class="gov-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h3 class="gov-title">100% Deterministik</h3>
+      <p class="gov-text">Seluruh skor dihitung otomatis oleh algoritma Supply Concentration Reversal (SCR) v10 setiap hari tanpa intervensi opini emosional atau bias subjektif.</p>
+    </div>
+    
+    <div class="gov-card">
+      <div class="gov-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h3 class="gov-title">Isolasi Publik &amp; Nol Kebocoran</h3>
+      <p class="gov-text">Dataset publik diisolasi sepenuhnya. Tanpa portofolio pribadi, tanpa API keys, dan tanpa label internal tertutup. 100% aman disebarluaskan ke publik dan mitra institusi.</p>
+    </div>
+    
+    <div class="gov-card">
+      <div class="gov-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h3 class="gov-title">Invalidasi Risiko Terukur</h3>
+      <p class="gov-text">Setiap aset dilengkapi level invalidasi yang jelas. Jika struktur konsolidasi dasar ditembus ke bawah, tesis investasi dinyatakan batal secara disiplin.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-foot">
+  <div class="foot-inner">
+    <div class="foot-col">
+      <div class="brand-wrap" style="margin-bottom:14px">
+        <div class="brand-logo-icon" style="width:28px;height:28px;font-size:14px">B</div>
+        <div class="brand-name" style="font-size:15px">BottomScreenr Intelligence</div>
+      </div>
+      <p>Firma riset kuantitatif dan intelijen on-chain independen yang berfokus pada deteksi pembentukan dasar harga, pelacakan dompet institusi, dan mitigasi risiko dilusi token.</p>
+    </div>
+    
+    <div class="foot-col">
+      <h4>Koleksi Produk Riset</h4>
+      <ul class="foot-links">
+        <li><a href="deck.html">Executive Presentation Deck (16:9)</a></li>
+        <li><a href="desktop.html">Quantitative Screener Terminal (Desktop)</a></li>
+        <li><a href="mobile.html">Mobile Intelligence &amp; Alert Feed</a></li>
+        <li><a href="desktop.html#makro">Macro Cycle &amp; Dominance Monitor</a></li>
+      </ul>
+    </div>
+    
+    <div class="foot-col">
+      <h4>Kepatuhan &amp; Repositori</h4>
+      <ul class="foot-links">
+        <li><a href="https://github.com/onchaincycle/scr-dashboard" target="_blank">GitHub Repository &rarr;</a></li>
+        <li><a href="https://onchaincycle.github.io/scr-dashboard/" target="_blank">GitHub Pages Live Site &rarr;</a></li>
+        <li><a href="#governance">Prinsip Metodologi Kuantitatif</a></li>
+        <li><a href="#">Disclaimer Finansial Resmi</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="foot-bottom">
+    <div>© 2026 BottomScreenr Intelligence (BSI). All rights reserved. Deterministic Algorithm SCR v10.</div>
+    <div>Laporan ini disusun untuk tujuan riset terstruktur independen dan bukan merupakan nasihat keuangan individual.</div>
+  </div>
+</footer>
+
+<script>
+function filterCat(cat, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  const cards = document.querySelectorAll('.rep-card');
+  cards.forEach(c => {
+    if (cat === 'all' || c.dataset.cat === cat) {
+      c.style.display = 'flex';
+    } else {
+      c.style.display = 'none';
+    }
+  });
+}
+
+function filterRadar() {
+  const q = document.getElementById('radarSearch').value.toLowerCase().trim();
+  const rows = document.querySelectorAll('#radarTable tbody tr');
+  rows.forEach(r => {
+    const sym = r.dataset.symbol || '';
+    const name = r.dataset.name || '';
+    if (!q || sym.includes(q) || name.includes(q)) {
+      r.style.display = '';
+    } else {
+      r.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

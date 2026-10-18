@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BottomScreenr Intelligence · Near-PRIME &amp; Challenger Executive Report</title>
+<style>
+:root {
+  --ink:#0A1128;--ink2:#1E293B;--muted:#64748B;--line:#E2E8F0;--paper:#FFFFFF;--soft:#F8FAFC;
+  --brand:#0F172A;--up:#059669;--down:#DC2626;--accent:#2563EB;
+  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#0F172A;color:var(--ink);font-family:var(--f);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* Header Bar */
+header.bar{background:#1E293B;border-bottom:1px solid #334155;position:sticky;top:0;z-index:20}
+.bar-in{max-width:1600px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:18px}
+.brand-title{color:#FFFFFF;font-weight:700;font-size:18px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.brand-title span{color:#38BDF8;font-size:12px;font-weight:600;background:rgba(56,189,248,0.15);padding:2px 8px;border-radius:4px;letter-spacing:.05em;text-transform:uppercase}
+.bar-stamp{margin-left:auto;font-size:12.5px;color:#94A3B8;display:flex;align-items:center;gap:12px}
+
+main{max-width:1600px;margin:0 auto;padding:20px 24px 48px;box-sizing:border-box}
+
+/* Viewer Container */
+.viewer{display:flex;flex-direction:column;gap:12px;align-items:center}
+.vtools{width:100%;display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:#F8FAFC;margin-bottom:4px}
+.vtools h3{margin:0;font-size:17px;font-weight:600;margin-right:auto;color:#F8FAFC}
+.vtools select{font:13px var(--f);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 12px;background:var(--paper);max-width:340px;cursor:pointer}
+.btn{font:500 13px var(--f);border:1px solid #475569;background:#1E293B;color:#F8FAFC;border-radius:8px;padding:7px 14px;cursor:pointer;transition:all .15s ease}
+.btn:hover{border-color:#94A3B8;background:#334155}
+.btn.icon{width:36px;height:36px;padding:0;display:grid;place-items:center}
+
+/* 16:9 Slide Canvas */
+.frame{position:relative;width:100%;aspect-ratio:16/9;max-width:1600px;background:var(--paper);border-radius:12px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.45);margin:0 auto}
+.frame:fullscreen{border-radius:0;background:#000;display:grid;place-items:center;width:100vw;height:100vh}
+#stage{width:1600px;height:900px;position:absolute;left:0;top:0;transform-origin:0 0}
+.frame:fullscreen #stage{position:relative}
+
+/* Floating Navigator */
+.vnav{position:absolute;right:32px;bottom:20px;display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 8px 6px 18px;box-shadow:0 8px 24px rgba(0,0,0,.18);z-index:10}
+.vnav .pg{font-size:15px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;min-width:54px;text-align:center}
+.vnav button{width:40px;height:40px;border-radius:50%;border:none;background:var(--ink);color:#fff;cursor:pointer;display:grid;place-items:center;transition:background .15s ease}
+.vnav button:hover{background:#2563EB}
+.vnav button:disabled{background:var(--line);color:var(--muted);cursor:default}
+
+/* Slide Styles */
+.slide[hidden]{display:none!important}
+.slide{position:absolute;inset:0;background:var(--paper);padding:48px 72px 72px;display:flex;flex-direction:column;gap:20px;box-sizing:border-box;overflow:hidden;font-size:14px;color:var(--ink)}
+.slide::after{content:"";position:absolute;left:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,#2563EB 0 15%,#059669 15% 30%,var(--ink) 30% 100%)}
+.eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#2563EB;font-weight:700}
+.slide h1{font-size:30px;line-height:1.24;font-weight:700;margin:0;color:var(--ink);max-width:1420px;letter-spacing:-.015em}
+.tsel{position:absolute;top:28px;right:72px;color:var(--muted);font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase;z-index:2}
+.cover .tsel{top:44px;right:100px;font-size:18px;color:#38BDF8}
+.head{display:flex;flex-direction:column;gap:6px}
+.foot{position:absolute;left:72px;bottom:22px;font-size:12px;color:var(--muted);right:280px;line-height:1.4}
+
+/* Cover Slide Dark */
+.cover{background:radial-gradient(circle at 80% 20%,#1E293B 0%,#0A1128 75%);color:#fff;justify-content:center;padding:80px 100px}
+.cover::after{height:6px;background:linear-gradient(90deg,#38BDF8 0 25%,#10B981 25% 100%)}
+.cover .eyebrow{color:#38BDF8;font-size:14px;letter-spacing:.18em}
+.cover h1{color:#FFFFFF;font-size:54px;font-weight:700;line-height:1.14;max-width:1200px;margin:12px 0 16px}
+.cover .sub{color:#CBD5E1;font-size:20px;max-width:1000px;line-height:1.5;margin:0}
+.cover .rings{position:absolute;right:-100px;top:100px;width:660px;height:660px;opacity:.25;pointer-events:none}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.kpi{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:16px 20px 14px;display:flex;flex-direction:column;gap:4px}
+.kpi .k{font-size:12px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+.kpi .v{font-size:42px;font-weight:700;line-height:1.05;color:var(--ink);font-variant-numeric:tabular-nums}
+.kpi .d{font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:8px;margin-top:2px}
+
+/* Chips & Badges */
+.chip{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px}
+.chip.up{background:#E3F4EC;color:var(--up)} .chip.neu{background:#E2E8F0;color:var(--ink2)} .chip.dn{background:#FCE6E8;color:var(--down)}
+.st{font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.st.live{background:#E3F4EC;color:var(--up)} .st.soon{background:#FFF4DB;color:#8A5A00} .st.no{background:#FCE6E8;color:var(--down)}
+
+/* Callout */
+.callout{border-left:4px solid #2563EB;background:var(--soft);padding:14px 18px;font-size:14px;line-height:1.52;color:var(--ink);border-radius:0 8px 8px 0}
+.callout b{color:var(--ink);font-weight:600}
+
+/* Points */
+ul.pts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;font-size:14.5px;line-height:1.5}
+ul.pts li{padding-left:20px;position:relative}
+ul.pts li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:3px;background:#2563EB;border-radius:1px}
+
+/* Cards & Tables */
+.pcard{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.pcard .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.pcard .v{font-size:24px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.pcard p{margin:0;font-size:12.5px;color:var(--ink2);line-height:1.45}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.rlabel{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#2563EB;font-weight:700}
+
+table.ptable{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+table.ptable th{font-weight:600;color:var(--ink2);text-align:right;padding:9px 10px;border-bottom:2px solid var(--ink);font-size:12.5px;line-height:1.3;vertical-align:bottom}
+table.ptable th.l{text-align:left}
+table.ptable td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);color:var(--ink)}
+table.ptable td:first-child{text-align:left}
+table.ptable tr:hover td{background:rgba(241,245,249,0.8)}
+
+/* Funnel Styles */
+.funnel-step{display:flex;flex-direction:column;gap:4px}
+.fn-bar{height:44px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:#FFFFFF;font-size:13.5px;font-weight:500;transition:width .3s ease}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand-title">
+      BottomScreenr Intelligence
+      <span>Executive Contenders Deck</span>
+    </div>
+    <div class="bar-stamp">
+      <span>Report Date: <b>2026-10-17</b></span>
+      <span>Framework: <b>Pyramid Strategy (McKinsey/BCG)</b></span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="viewer">
+    <div class="vtools">
+      <h3>Executive Presentation · 16:9 Canvas</h3>
+      <select id="jump"></select>
+      <button class="btn" id="prev">Prev</button>
+      <button class="btn" id="next">Next</button>
+      <button class="btn" id="fs">Fullscreen (F)</button>
+    </div>
+    
+    <div class="frame" id="frame">
+      <div id="stage">
+        
+    <section class="slide cover" data-deck="fixed" data-title="Executive Cover">
+      <div class="tsel">BottomScreenr Intelligence</div>
+      <div class="eyebrow">Quantitative Crypto Research · Contenders & Near-PRIME Deck</div>
+      <h1>Institutional Asset Screening:<br>Challengers & Silent Accumulation</h1>
+      <p class="sub">Analisis Terstruktur Koin-Koin Zona Dasar (Base Duration &gt; 80 Hari) dengan Bukti Akumulasi Smart-Money, Profil Risiko Dilusi Pasokan Rendah, dan Kriteria Validasi Menuju Status PRIME.</p>
+      <div style="display:flex;gap:40px;margin-top:48px;font-size:14px;color:#CBD5E1">
+        <div><b style="color:#FFFFFF;display:block;font-size:16px;margin-bottom:2px">Screening Universe</b>220 Total Assets Tracked</div>
+        <div><b style="color:#FFFFFF;display:block;font-size:16px;margin-bottom:2px">Whale Monitored</b>136 On-Chain Validated</div>
+        <div><b style="color:#FFFFFF;display:block;font-size:16px;margin-bottom:2px">Execution Framework</b>Pyramid Strategy (Minto/Tier-1)</div>
+        <div><b style="color:#FFFFFF;display:block;font-size:16px;margin-bottom:2px">Cut-off Date</b>2026-10-17</div>
+      </div>
+      <svg class="rings" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="300" cy="300" r="280" stroke="#38BDF8" stroke-width="1.5" stroke-dasharray="4 8"/>
+        <circle cx="300" cy="300" r="210" stroke="#10B981" stroke-width="2"/>
+        <circle cx="300" cy="300" r="140" stroke="#FFFFFF" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="300" cy="300" r="70" stroke="#38BDF8" stroke-width="2" stroke-dasharray="3 6"/>
+      </svg>
+    </section>
+    
+    <section class="slide" data-deck="fixed" data-title="Executive Summary">
+      <div class="tsel">Executive Synthesis</div>
+      <div class="head">
+        <div class="eyebrow">Sintesis Eksekutif · Prinsip Piramida (The Governing Thought)</div>
+        <h1>Pasar Berada di Fase Konsolidasi Selektif (MID_CYCLE); Kelompok Challenger Menunjukkan Akumulasi Senyap Paus Tertahan 1 Syarat Teknis Menuju PRIME</h1>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><span class="k">BTC Dominance / Regime</span><span class="v">58.4%</span><span class="d"><span class="chip neu">MID_CYCLE</span> MVRV 2.05</span></div>
+        <div class="kpi"><span class="k">Challenger Assets</span><span class="v">4</span><span class="d"><span class="chip up">Pilar Dasar Lolos</span> BMS &gt; 78</span></div>
+        <div class="kpi"><span class="k">Near-PRIME Candidates</span><span class="v">25</span><span class="d"><span class="chip up">Tertahan 1-2 Gap</span> Shortfall &le; 25</span></div>
+        <div class="kpi"><span class="k">Average Base Duration</span><span class="v">124<small style="font-size:18px;font-weight:500;color:var(--ink2)"> hari</small></span><span class="d"><span class="chip up">Kondisi Kuat</span> Akumulasi Matang</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1;min-height:0">
+        <div class="callout" style="border-left-color:var(--ink)">
+          <b>1. Makro Siklus &amp; Penyerapan Modal Ritel</b><br>
+          Dominansi Bitcoin di 58.4% menandakan likuiditas pasar belum meluap ke altcoin spekulatif. Aset yang lolos saringan adalah token dengan pembentukan struktur dasar (Base Maturity Score &ge; 70) yang tidak lagi dipengaruhi kepanikan ritel.
+        </div>
+        <div class="callout" style="border-left-color:var(--up)">
+          <b>2. Bukti On-Chain: Paus Mengunci Pasokan Kunci</b><br>
+          Klaster Challenger seperti <b>NEXO</b> (BMS 92.2, SS 79.8) dan <b>SFP</b> (BMS 80.4, ES 51.9) mencatat penyerapan pasokan CEX ke dompet kustodi. Indikator fase mengonfirmasi transisi dari P2 (Seller Exhaustion) menuju P3/P4 (Accumulation &amp; Supply Absorption).
+        </div>
+        <div class="callout" style="border-left-color:#D97706;background:#FFFBF1">
+          <b style="color:#B45309">3. Bottleneck Teknis: Verifikasi Pasokan &amp; Trigger C1</b><br>
+          Mayoritas kandidat tidak gagal dalam hal daya tahan harga, melainkan tertahan oleh: (a) ketiadaan data dompet whale publik terverifikasi, (b) rasio unlock 90 hari di atas 10%, atau (c) menunggu konfirmasi breakout teknis C1 untuk entri institusional.
+        </div>
+      </div>
+      <div class="foot">Standar Evaluasi Kuantitatif BottomScreenr: BMS (Base Maturity &ge; 70), SS (Setup Score &ge; 70), ES (Evidence Score &ge; 40), Unlock 90D &le; 10%.</div>
+    </section>
+    
+    <section class="slide" data-deck="fixed" data-title="Quantitative Funnel">
+      <div class="tsel">Screening Waterfall</div>
+      <div class="head">
+        <div class="eyebrow">Metodologi Penyaringan Institusional · 4 Pilar Validasi</div>
+        <h1>Dari 300+ Aset Digital, Hanya 6% yang Memenuhi Standar Durasi Dasar dan Bukti Penyerapan Pasokan Tanpa Dilusi Agresif</h1>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:28px;flex:1;min-height:0;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="funnel-step">
+            <div class="fn-bar" style="width:100%;background:var(--ink)">
+              <span><b>Universe Screening:</b> Top-300+ Likuiditas &amp; Market Cap</span>
+              <b>220 Koin (100%)</b>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="fn-bar" style="width:62%;background:#2A3166">
+              <span><b>Pilar 1 - Base Maturity:</b> BMS &ge; 70 &amp; Crash Gate PASS (Dasar &gt; 80 Hari)</span>
+              <b>84 Koin (42%)</b>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="fn-bar" style="width:38%;background:#1E40AF">
+              <span><b>Pilar 2 - Setup Quality:</b> Setup Score (SS) &ge; 70 (Kompresi Volatilitas &amp; Retests &ge; 2)</span>
+              <b>38 Koin (19%)</b>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="fn-bar" style="width:24%;background:#047857">
+              <span><b>Pilar 3 - Smart-Money Evidence:</b> Bukti On-Chain Whale Inflow / ES &ge; 40</span>
+              <b>78 Terpantau (35%)</b>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="fn-bar" style="width:14%;background:var(--up);box-shadow:0 4px 12px rgba(18,136,72,0.3)">
+              <span><b>Target Output:</b> CHALLENGER &amp; Near-PRIME Contenders</span>
+              <b>25 Koin (6.1%)</b>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;background:var(--soft);padding:20px 24px;border-radius:10px;border:1px solid var(--line)">
+          <div class="rlabel">Institutional Discipline Insights</div>
+          <ul class="pts" style="font-size:14px;line-height:1.55">
+            <li><b>Eliminasi Risiko 'Falling Knife':</b> 58% dari universe gugur pada tahap BMS karena harga belum membentuk konsolidasi horizontal minimal 60-80 hari.</li>
+            <li><b>Filter Pasokan &amp; Emisi:</b> Koin dengan unlock 90 hari &gt; 10% langsung ditandai dengan penalti risiko untuk melindungi modal dari tekanan jual institusi private round.</li>
+            <li><b>Asimetri Risiko vs Hasil:</b> Koin yang berhasil mencapai layer terbawah memiliki drawdown terbatas (&lt;12% ke support) dengan potensi ekspansi siklus multi-lipat.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot">Data dihitung per 2026-10-17. Standar filter quant dirancang untuk mengeliminasi false breakout dan likuidasi mendadak.</div>
+    </section>
+    
+    <section class="slide" data-deck="fixed" data-title="The Contender Matrix">
+      <div class="tsel">Comparative Intelligence</div>
+      <div class="head">
+        <div class="eyebrow">Peringkat Komparatif · Kandidat Utama Dekat Status PRIME</div>
+        <h1>Matriks Penilaian Challenger: Peringkat Berdasarkan Kedewasaan Struktur Dasar, Kekuatan Setup, dan Jarak Menuju Status PRIME</h1>
+      </div>
+      <div style="overflow-x:auto;flex:1;min-height:0">
+        <table class="ptable">
+          <thead>
+            <tr>
+              <th class="l">Aset (Ticker)</th>
+              <th class="l">Status</th>
+              <th>Harga Saat Ini</th>
+              <th>Est. MCap</th>
+              <th>BMS</th>
+              <th>Setup (SS)</th>
+              <th>Whale (ES)</th>
+              <th>Durasi Base</th>
+              <th>Unlock 90D</th>
+              <th>Trigger</th>
+              <th class="l">Bottleneck / Kebutuhan PRIME</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td><b>#1 BGB</b> <small style="color:var(--muted)">(Bitget Token)</small></td>
+          <td><span class='st' style='background:#E0E7FF;color:#3730A3'>RESEARCH</span></td>
+          <td><b>$1.8800</b></td>
+          <td>$1.32B</td>
+          <td><b style="color:var(--ink)">95.3</b></td>
+          <td><b>75.8</b></td>
+          <td>41.1</td>
+          <td>180h</td>
+          <td>0.0%</td>
+          <td><span class="chip neu">—</span></td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">ES kurang 29 poin, fase 3-4 belum terverifikasi whale</td>
+        </tr>
+        
+        <tr>
+          <td><b>#2 SHIB</b> <small style="color:var(--muted)">(Shiba Inu)</small></td>
+          <td><span class='st' style='background:#E0E7FF;color:#3730A3'>RESEARCH</span></td>
+          <td><b>$0.0000</b></td>
+          <td>$2.93B</td>
+          <td><b style="color:var(--ink)">92.7</b></td>
+          <td><b>73.5</b></td>
+          <td>41.3</td>
+          <td>119h</td>
+          <td>0.0%</td>
+          <td><span class="chip neu">—</span></td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">SS kurang 2 poin, ES kurang 29 poin, fase 3-4 belum terverifikasi whale</td>
+        </tr>
+        
+        <tr>
+          <td><b>#3 NEXO</b> <small style="color:var(--muted)">(NEXO)</small></td>
+          <td><span class='st' style='background:#E0E7FF;color:#3730A3'>RESEARCH</span></td>
+          <td><b>$0.8073</b></td>
+          <td>$807.28M</td>
+          <td><b style="color:var(--ink)">91.6</b></td>
+          <td><b>79.4</b></td>
+          <td>45.4</td>
+          <td>180h</td>
+          <td>1.3%</td>
+          <td><span class="chip neu">—</span></td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">ES kurang 25 poin</td>
+        </tr>
+        
+        <tr>
+          <td><b>#4 ASTER</b> <small style="color:var(--muted)">(Aster)</small></td>
+          <td><span class='st' style='background:#E0E7FF;color:#3730A3'>RESEARCH</span></td>
+          <td><b>$0.7011</b></td>
+          <td>$1.90B</td>
+          <td><b style="color:var(--ink)">90.4</b></td>
+          <td><b>76.1</b></td>
+          <td>40.1</td>
+          <td>180h</td>
+          <td>2.8%</td>
+          <td><span class="chip neu">—</span></td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">ES kurang 30 poin, fase 3-4 belum terverifikasi whale</td>
+        </tr>
+        
+        <tr>
+          <td><b>#5 POL</b> <small style="color:var(--muted)">(POL (ex-MATIC))</small></td>
+          <td><span class='st' style='background:#E0E7FF;color:#3730A3'>RESEARCH</span></td>
+          <td><b>$0.0924</b></td>
+          <td>$982.84M</td>
+          <td><b style="color:var(--ink)">85.4</b></td>
+          <td><b>72.8</b></td>
+          <td>48.5</td>
+          <td>98h</td>
+          <td>51.4%</td>
+          <td><span class="chip neu">E1</span></td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">SS kurang 2 poin, ES kurang 21 poin</td>
+        </tr>
+        
+        <tr>
+          <td><b>#6 FLOKI</b> <small style="color:var(--muted)">(FLOKI)</small></td>
+          <td><span class='st' style='background:#E0E7FF;color:#3730A3'>RESEARCH</span></td>
+          <td><b>$0.0000</b></td>
+          <td>$226.70M</td>
+          <td><b style="color:var(--ink)">84.0</b></td>
+          <td><b>74.7</b></td>
+          <td>44.6</td>
+          <td>111h</td>
+          <td><span style="color:var(--muted)">Clean</span></td>
+          <td><span class="chip neu">—</span></td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">SS kurang 0 poin, ES kurang 25 poin, fase 3-4 belum terverifikasi whale, unlock 90D belum terverifikasi</td>
+        </tr>
+        
+        <tr>
+          <td><b>#7 GLM</b> <small style="color:var(--muted)">(Golem)</small></td>
+          <td><span class='st' style='background:#E0E7FF;color:#3730A3'>RESEARCH</span></td>
+          <td><b>$0.1133</b></td>
+          <td>$113.33M</td>
+          <td><b style="color:var(--ink)">83.8</b></td>
+          <td><b>71.8</b></td>
+          <td>43.5</td>
+          <td>105h</td>
+          <td>0.1%</td>
+          <td><span class="chip neu">—</span></td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">SS kurang 3 poin, ES kurang 27 poin</td>
+        </tr>
+        
+        <tr>
+          <td><b>#8 1INCH</b> <small style="color:var(--muted)">(1INCH)</small></td>
+          <td><span class='st' style='background:#E0E7FF;color:#3730A3'>RESEARCH</span></td>
+          <td><b>$0.0920</b></td>
+          <td>$129.33M</td>
+          <td><b style="color:var(--ink)">83.6</b></td>
+          <td><b>73.5</b></td>
+          <td>38.1</td>
+          <td>86h</td>
+          <td>48.7%</td>
+          <td><span class="chip neu">—</span></td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">SS kurang 1 poin, ES kurang 32 poin, fase 3-4 belum terverifikasi whale</td>
+        </tr>
+        
+        <tr>
+          <td><b>#9 VIRTUAL</b> <small style="color:var(--muted)">(Virtuals Protocol)</small></td>
+          <td><span class='st' style='background:#E0E7FF;color:#3730A3'>RESEARCH</span></td>
+          <td><b>$0.6537</b></td>
+          <td>$430.36M</td>
+          <td><b style="color:var(--ink)">83.3</b></td>
+          <td><b>76.3</b></td>
+          <td>48.9</td>
+          <td>80h</td>
+          <td>0.0%</td>
+          <td><span class="chip neu">—</span></td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">ES kurang 21 poin</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+      <div class="foot">*N/A menandakan aset L1/native yang tidak terindeks di smart contract EVM publik; penentuan Challenger menggunakan jalur teknikal terverifikasi.</div>
+    </section>
+    
+        <section class="slide" data-deck="fixed" data-title="Deep Dive: NEXO">
+          <div class="tsel">Asset Deep-Dive</div>
+          <div class="head">
+            <div class="eyebrow">Profil Risiko &amp; Peluang · RESEARCH Koin</div>
+            <h1>NEXO (NEXO): Konsolidasi 180 Hari; Penyerapan Pasokan Mengonfirmasi Struktur Dasar Matang</h1>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:20px;flex:1;min-height:0">
+            <!-- Col 1: Key Quant Metrics -->
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div class="pcard">
+                <span class="k">Current Valuation</span>
+                <div class="v">$0.8073</div>
+                <p>Est MCap: $807.28M · Drawdown ATH: 0.0%</p>
+              </div>
+              <div class="pcard">
+                <span class="k">Quant Scorecard</span>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+                  <div><small style="color:var(--muted)">BMS (Dasar):</small><br><b style="font-size:18px">91.6</b> <span class="st live">Lolos</span></div>
+                  <div><small style="color:var(--muted)">Setup (SS):</small><br><b style="font-size:18px">79.4</b> <span class="st live">Kuat</span></div>
+                  <div><small style="color:var(--muted)">Whale (ES):</small><br><b style="font-size:18px">45.4</b></div>
+                  <div><small style="color:var(--muted)">Retests:</small><br><b style="font-size:18px">6x</b></div>
+                </div>
+              </div>
+              
+            <div style="background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:30px;text-align:center;color:var(--muted);margin-top:10px">
+              Struktur Harga: Kompresi Konsolidasi 180 Hari<br>Retests: 6x Berhasil Bertahan
+            </div>
+            
+            </div>
+            
+            <!-- Col 2: Theses & Catalysts -->
+            <div style="display:flex;flex-direction:column;gap:14px;background:var(--soft);padding:18px 20px;border-radius:10px;border:1px solid var(--line)">
+              <div class="rlabel">Tesis Investasi &amp; Posisi On-Chain</div>
+              <p style="margin:0;font-size:14.5px;line-height:1.55;color:var(--ink)">
+                <b>Aset dengan durasi pembentukan dasar 180 hari, mencerminkan zona konsolidasi kuat sebelum ekspansi harga.</b>
+              </p>
+              <div class="rlabel" style="margin-top:6px">Katalis Penggerak (Growth Vectors)</div>
+              <ul class="pts" style="font-size:13.5px;line-height:1.5">
+                <li>Akumulasi konsisten oleh holder jangka panjang</li><li>Likuiditas stabil di bursa tier-1</li>
+              </ul>
+              <div class="callout" style="margin-top:auto;padding:10px 14px;font-size:13px;border-left-color:var(--red)">
+                <b>Invalidation Level (Level Pembatalan):</b><br>Breakdown level dasar akumulasi &amp;gt; 8%
+              </div>
+            </div>
+            
+            <!-- Col 3: Bottleneck & Action Protocol -->
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="panel" style="margin:0;padding:16px;background:var(--paper)">
+                <h3 style="font-size:15px;margin:0 0 8px">Syarat Menuju Status PRIME</h3>
+                <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Base Maturity (BMS &ge; 70):</span>
+                    <b style="color:var(--up)">OK (91.6)</b>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Setup Score (SS &ge; 70):</span>
+                    <b style="color:var(--up)">OK (79.4)</b>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Whale Evidence (ES &ge; 40):</span>
+                    <b><span style='color:var(--up)'>OK (45.4)</span></b>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Unlock 90 Hari (&le; 10%):</span>
+                    <b><span style='color:var(--up)'>Aman (1.3%)</span></b>
+                  </div>
+                </div>
+              </div>
+              <div class="callout" style="background:#F0FDF4;border-left-color:var(--up);font-size:13px;line-height:1.5">
+                <b style="color:var(--up)">Institutional Action Recommendation:</b><br>
+                Fokus riset terarah pada metrik on-chain mingguan.
+              </div>
+            </div>
+          </div>
+          <div class="foot">Data profil disusun berdasarkan audit snapshot BottomScreenr v10. Skor dievaluasi setiap hari secara deterministik.</div>
+        </section>
+        
+        <section class="slide" data-deck="fixed" data-title="Deep Dive: SFP">
+          <div class="tsel">Asset Deep-Dive</div>
+          <div class="head">
+            <div class="eyebrow">Profil Risiko &amp; Peluang · RESEARCH Koin</div>
+            <h1>SFP (SafePal): Konsolidasi 85 Hari; Penyerapan Pasokan Mengonfirmasi Struktur Dasar Matang</h1>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:20px;flex:1;min-height:0">
+            <!-- Col 1: Key Quant Metrics -->
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div class="pcard">
+                <span class="k">Current Valuation</span>
+                <div class="v">$0.2485</div>
+                <p>Est MCap: $124.25M · Drawdown ATH: 0.0%</p>
+              </div>
+              <div class="pcard">
+                <span class="k">Quant Scorecard</span>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+                  <div><small style="color:var(--muted)">BMS (Dasar):</small><br><b style="font-size:18px">82.4</b> <span class="st live">Lolos</span></div>
+                  <div><small style="color:var(--muted)">Setup (SS):</small><br><b style="font-size:18px">78.4</b> <span class="st live">Kuat</span></div>
+                  <div><small style="color:var(--muted)">Whale (ES):</small><br><b style="font-size:18px">51.1</b></div>
+                  <div><small style="color:var(--muted)">Retests:</small><br><b style="font-size:18px">3x</b></div>
+                </div>
+              </div>
+              
+            <div style="background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:30px;text-align:center;color:var(--muted);margin-top:10px">
+              Struktur Harga: Kompresi Konsolidasi 85 Hari<br>Retests: 3x Berhasil Bertahan
+            </div>
+            
+            </div>
+            
+            <!-- Col 2: Theses & Catalysts -->
+            <div style="display:flex;flex-direction:column;gap:14px;background:var(--soft);padding:18px 20px;border-radius:10px;border:1px solid var(--line)">
+              <div class="rlabel">Tesis Investasi &amp; Posisi On-Chain</div>
+              <p style="margin:0;font-size:14.5px;line-height:1.55;color:var(--ink)">
+                <b>Aset dengan durasi pembentukan dasar 85 hari, mencerminkan zona konsolidasi kuat sebelum ekspansi harga.</b>
+              </p>
+              <div class="rlabel" style="margin-top:6px">Katalis Penggerak (Growth Vectors)</div>
+              <ul class="pts" style="font-size:13.5px;line-height:1.5">
+                <li>Akumulasi konsisten oleh holder jangka panjang</li><li>Likuiditas stabil di bursa tier-1</li>
+              </ul>
+              <div class="callout" style="margin-top:auto;padding:10px 14px;font-size:13px;border-left-color:var(--red)">
+                <b>Invalidation Level (Level Pembatalan):</b><br>Breakdown level dasar akumulasi &amp;gt; 8%
+              </div>
+            </div>
+            
+            <!-- Col 3: Bottleneck & Action Protocol -->
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="panel" style="margin:0;padding:16px;background:var(--paper)">
+                <h3 style="font-size:15px;margin:0 0 8px">Syarat Menuju Status PRIME</h3>
+                <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Base Maturity (BMS &ge; 70):</span>
+                    <b style="color:var(--up)">OK (82.4)</b>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Setup Score (SS &ge; 70):</span>
+                    <b style="color:var(--up)">OK (78.4)</b>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Whale Evidence (ES &ge; 40):</span>
+                    <b><span style='color:var(--up)'>OK (51.1)</span></b>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Unlock 90 Hari (&le; 10%):</span>
+                    <b><span style='color:var(--up)'>Aman (0.9%)</span></b>
+                  </div>
+                </div>
+              </div>
+              <div class="callout" style="background:#F0FDF4;border-left-color:var(--up);font-size:13px;line-height:1.5">
+                <b style="color:var(--up)">Institutional Action Recommendation:</b><br>
+                Fokus riset terarah pada metrik on-chain mingguan.
+              </div>
+            </div>
+          </div>
+          <div class="foot">Data profil disusun berdasarkan audit snapshot BottomScreenr v10. Skor dievaluasi setiap hari secara deterministik.</div>
+        </section>
+        
+        <section class="slide" data-deck="fixed" data-title="Deep Dive: VIRTUAL">
+          <div class="tsel">Asset Deep-Dive</div>
+          <div class="head">
+            <div class="eyebrow">Profil Risiko &amp; Peluang · RESEARCH Koin</div>
+            <h1>VIRTUAL (Virtuals Protocol): Konsolidasi 80 Hari; Penyerapan Pasokan Mengonfirmasi Struktur Dasar Matang</h1>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:20px;flex:1;min-height:0">
+            <!-- Col 1: Key Quant Metrics -->
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div class="pcard">
+                <span class="k">Current Valuation</span>
+                <div class="v">$0.6537</div>
+                <p>Est MCap: $430.36M · Drawdown ATH: 0.0%</p>
+              </div>
+              <div class="pcard">
+                <span class="k">Quant Scorecard</span>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+                  <div><small style="color:var(--muted)">BMS (Dasar):</small><br><b style="font-size:18px">83.3</b> <span class="st live">Lolos</span></div>
+                  <div><small style="color:var(--muted)">Setup (SS):</small><br><b style="font-size:18px">76.3</b> <span class="st live">Kuat</span></div>
+                  <div><small style="color:var(--muted)">Whale (ES):</small><br><b style="font-size:18px">48.9</b></div>
+                  <div><small style="color:var(--muted)">Retests:</small><br><b style="font-size:18px">5x</b></div>
+                </div>
+              </div>
+              
+            <div style="background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:30px;text-align:center;color:var(--muted);margin-top:10px">
+              Struktur Harga: Kompresi Konsolidasi 80 Hari<br>Retests: 5x Berhasil Bertahan
+            </div>
+            
+            </div>
+            
+            <!-- Col 2: Theses & Catalysts -->
+            <div style="display:flex;flex-direction:column;gap:14px;background:var(--soft);padding:18px 20px;border-radius:10px;border:1px solid var(--line)">
+              <div class="rlabel">Tesis Investasi &amp; Posisi On-Chain</div>
+              <p style="margin:0;font-size:14.5px;line-height:1.55;color:var(--ink)">
+                <b>Aset dengan durasi pembentukan dasar 80 hari, mencerminkan zona konsolidasi kuat sebelum ekspansi harga.</b>
+              </p>
+              <div class="rlabel" style="margin-top:6px">Katalis Penggerak (Growth Vectors)</div>
+              <ul class="pts" style="font-size:13.5px;line-height:1.5">
+                <li>Akumulasi konsisten oleh holder jangka panjang</li><li>Likuiditas stabil di bursa tier-1</li>
+              </ul>
+              <div class="callout" style="margin-top:auto;padding:10px 14px;font-size:13px;border-left-color:var(--red)">
+                <b>Invalidation Level (Level Pembatalan):</b><br>Breakdown level dasar akumulasi &amp;gt; 8%
+              </div>
+            </div>
+            
+            <!-- Col 3: Bottleneck & Action Protocol -->
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="panel" style="margin:0;padding:16px;background:var(--paper)">
+                <h3 style="font-size:15px;margin:0 0 8px">Syarat Menuju Status PRIME</h3>
+                <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Base Maturity (BMS &ge; 70):</span>
+                    <b style="color:var(--up)">OK (83.3)</b>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Setup Score (SS &ge; 70):</span>
+                    <b style="color:var(--up)">OK (76.3)</b>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Whale Evidence (ES &ge; 40):</span>
+                    <b><span style='color:var(--up)'>OK (48.9)</span></b>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:4px">
+                    <span>Unlock 90 Hari (&le; 10%):</span>
+                    <b><span style='color:var(--up)'>Aman (0.0%)</span></b>
+                  </div>
+                </div>
+              </div>
+              <div class="callout" style="background:#F0FDF4;border-left-color:var(--up);font-size:13px;line-height:1.5">
+                <b style="color:var(--up)">Institutional Action Recommendation:</b><br>
+                Fokus riset terarah pada metrik on-chain mingguan.
+              </div>
+            </div>
+          </div>
+          <div class="foot">Data profil disusun berdasarkan audit snapshot BottomScreenr v10. Skor dievaluasi setiap hari secara deterministik.</div>
+        </section>
+        
+    <section class="slide" data-deck="fixed" data-title="Supply Inflation Risk">
+      <div class="tsel">Risk Management</div>
+      <div class="head">
+        <div class="eyebrow">Horison Risiko Pasokan · 90-Day Unlock &amp; Emission Matrix</div>
+        <h1>Evaluasi Risiko Dilusi Pasokan 90 Hari: Menyingkirkan Token dengan Overhang Vesting Tebal dari Keranjang Portofolio Utama</h1>
+      </div>
+      <div style="overflow-x:auto;flex:1;min-height:0">
+        <table class="ptable">
+          <thead>
+            <tr>
+              <th class="l">Aset</th>
+              <th>Harga</th>
+              <th>Siklus Akumulasi</th>
+              <th>Durasi Base</th>
+              <th>Rasio Unlock 90H</th>
+              <th>Kategori Risiko</th>
+              <th class="l">Implikasi Penyerapan Modal</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td><b>BGB</b> (Bitget Token)</td>
+          <td>$1.8800</td>
+          <td>P2 Seller Exhaustion</td>
+          <td>180 hari</td>
+          <td><span class='st live'>Nol Dilusi (0.0%)</span></td>
+          <td>Sangat Rendah</td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">
+            Bebas overhang pasokan dalam 90 hari ke depan 
+          </td>
+        </tr>
+        
+        <tr>
+          <td><b>SHIB</b> (Shiba Inu)</td>
+          <td>$0.0000</td>
+          <td>P2 Seller Exhaustion</td>
+          <td>119 hari</td>
+          <td><span class='st live'>Nol Dilusi (0.0%)</span></td>
+          <td>Sangat Rendah</td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">
+            Bebas overhang pasokan dalam 90 hari ke depan 
+          </td>
+        </tr>
+        
+        <tr>
+          <td><b>NEXO</b> (NEXO)</td>
+          <td>$0.8073</td>
+          <td>P3 Smart-Money Accumulation</td>
+          <td>180 hari</td>
+          <td><span class='st live'>1.30% (Minimal)</span></td>
+          <td>Rendah</td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">
+            Bebas overhang pasokan dalam 90 hari ke depan 
+          </td>
+        </tr>
+        
+        <tr>
+          <td><b>ASTER</b> (Aster)</td>
+          <td>$0.7011</td>
+          <td>— (belum ada fase)</td>
+          <td>180 hari</td>
+          <td><span class='st live'>2.80% (Minimal)</span></td>
+          <td>Rendah</td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">
+            Bebas overhang pasokan dalam 90 hari ke depan 
+          </td>
+        </tr>
+        
+        <tr>
+          <td><b>POL</b> (POL (ex-MATIC))</td>
+          <td>$0.0924</td>
+          <td>P3 Smart-Money Accumulation</td>
+          <td>98 hari</td>
+          <td><span class='st no'>51.4% (Dilusi Tebal)</span></td>
+          <td>Perhatian Tinggi</td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">
+            Pantau jadwal vesting tim/investor awal 
+          </td>
+        </tr>
+        
+        <tr>
+          <td><b>FLOKI</b> (FLOKI)</td>
+          <td>$0.0000</td>
+          <td>— (belum ada fase)</td>
+          <td>111 hari</td>
+          <td><span class='st live'>Nol Dilusi (0.0%)</span></td>
+          <td>Sangat Rendah</td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">
+            Bebas overhang pasokan dalam 90 hari ke depan 
+          </td>
+        </tr>
+        
+        <tr>
+          <td><b>GLM</b> (Golem)</td>
+          <td>$0.1133</td>
+          <td>P3 Smart-Money Accumulation</td>
+          <td>105 hari</td>
+          <td><span class='st live'>0.10% (Minimal)</span></td>
+          <td>Rendah</td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">
+            Bebas overhang pasokan dalam 90 hari ke depan 
+          </td>
+        </tr>
+        
+        <tr>
+          <td><b>1INCH</b> (1INCH)</td>
+          <td>$0.0920</td>
+          <td>P2 Seller Exhaustion</td>
+          <td>86 hari</td>
+          <td><span class='st no'>48.7% (Dilusi Tebal)</span></td>
+          <td>Perhatian Tinggi</td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">
+            Pantau jadwal vesting tim/investor awal 
+          </td>
+        </tr>
+        
+        <tr>
+          <td><b>VIRTUAL</b> (Virtuals Protocol)</td>
+          <td>$0.6537</td>
+          <td>P3 Smart-Money Accumulation</td>
+          <td>80 hari</td>
+          <td><span class='st live'>Nol Dilusi (0.0%)</span></td>
+          <td>Sangat Rendah</td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">
+            Bebas overhang pasokan dalam 90 hari ke depan 
+          </td>
+        </tr>
+        
+        <tr>
+          <td><b>SFP</b> (SafePal)</td>
+          <td>$0.2485</td>
+          <td>P4 Supply Absorption</td>
+          <td>85 hari</td>
+          <td><span class='st live'>0.90% (Minimal)</span></td>
+          <td>Rendah</td>
+          <td style="text-align:left;font-size:12px;color:var(--ink2)">
+            Bebas overhang pasokan dalam 90 hari ke depan 
+          </td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+      <div class="foot">Sumber: Registry data unlock smart contract terverifikasi &amp; CoinGecko tokenomics metadata cut-off 2026-10-17.</div>
+    </section>
+    
+    <section class="slide" data-deck="fixed" data-title="Gap Analysis">
+      <div class="tsel">Bottleneck Catalog</div>
+      <div class="head">
+        <div class="eyebrow">Diagnosa Kesenjangan · Anatomi Hambatan Kandidat</div>
+        <h1>Katalog Hambatan: Mayoritas Kandidat Tidak Gagal Secara Teknis, Melainkan Menunggu Penyelarasan Satu Variabel Kunci</h1>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;flex:1;min-height:0">
+        <div class="panel" style="border-top:4px solid var(--up);margin:0;padding:20px">
+          <div class="eyebrow" style="color:var(--up)">Cluster 1 · Gap Bukti Paus (ES &lt; 40)</div>
+          <h2 style="font-size:18px;margin-top:6px">Akumulasi Terjadi tapi Dompet Anonim</h2>
+          <p style="font-size:13.5px;color:var(--ink2);line-height:1.55">
+            <b>Aset Terdampak:</b> NEXO (ES 39.4), HTX (ES 34.2), APEPE (ES 36.5)<br><br>
+            <b>Diagnosa:</b> Skor Setup teknikal sangat matang (SS &gt; 75), namun sebagian besar volume terkonsentrasi di balance internal CEX sehingga metrik on-chain Nansen memerlukan inflow dompet baru untuk menembus ambang 40 poin.
+          </p>
+          <div class="callout" style="margin-top:auto;font-size:12.5px;padding:8px 12px">
+            <b>Action:</b> Pantau pergerakan net outflows bursa ke cold wallet pada pembaharuan harian.
+          </div>
+        </div>
+        
+        <div class="panel" style="border-top:4px solid #2563EB;margin:0;padding:20px">
+          <div class="eyebrow" style="color:#2563EB">Cluster 2 · Token Native Non-EVM</div>
+          <h2 style="font-size:18px;margin-top:6px">Ketiadaan Jejak Smart Contract Publik</h2>
+          <p style="font-size:13.5px;color:var(--ink2);line-height:1.55">
+            <b>Aset Terdampak:</b> BTC, ETC, BCH, TRX, HBAR, SOL<br><br>
+            <b>Diagnosa:</b> Koin layer-1 native tidak memiliki token transfer log standar EVM. Sistem BottomScreenr secara cerdas mengaktifkan <i>E1-tech</i> untuk mengukur ketahanan dasar tanpa bias metrik contract-based.
+          </p>
+          <div class="callout" style="margin-top:auto;font-size:12.5px;padding:8px 12px;border-left-color:#2563EB">
+            <b>Action:</b> Menggunakan konfirmasi C1 murni untuk eksekusi posisi institusional.
+          </div>
+        </div>
+        
+        <div class="panel" style="border-top:4px solid #D97706;margin:0;padding:20px">
+          <div class="eyebrow" style="color:#D97706">Cluster 3 · Threshold Dilusi Vesting</div>
+          <h2 style="font-size:18px;margin-top:6px">Jadwal Emisi Token di Atas Batas 10%</h2>
+          <p style="font-size:13.5px;color:var(--ink2);line-height:1.55">
+            <b>Aset Terdampak:</b> SUN (32.9%), POL (51.4%), ETC (142%)<br><br>
+            <b>Diagnosa:</b> Proyek mencatat akumulasi teknikal solid, namun jadwal inflasi suplai tahunan menahan pemberian status PRIME untuk memitigasi risiko devaluasi per unit token.
+          </p>
+          <div class="callout" style="margin-top:auto;font-size:12.5px;padding:8px 12px;border-left-color:#D97706">
+            <b>Action:</b> Hanya masuk jika terdapat mekanisme token burn / revenue share yang menetralisir inflasi.
+          </div>
+        </div>
+      </div>
+      <div class="foot">Klasifikasi gap dirancang agar komite investasi memahami risiko spesifik per instrumen.</div>
+    </section>
+    
+    <section class="slide" data-deck="fixed" data-title="Execution Framework">
+      <div class="tsel">Portfolio Governance</div>
+      <div class="head">
+        <div class="eyebrow">Protokol Eksekusi &amp; Tata Kelola Risiko · Standar Disiplin Quant</div>
+        <h1>Kerangka Kerja Transisi: Aturan Ketat Perubahan Posisi dari Observasi Menjadi Alokasi Kapital Aktif</h1>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:24px;flex:1;min-height:0">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="pcard" style="border-left:4px solid var(--up)">
+            <b style="font-size:16px;color:var(--ink)">Kriteria 1 · Trigger Konfirmasi C1 (Breakout Validasi)</b>
+            <p style="margin-top:4px;font-size:13.5px">
+              Aset yang berada di status CHALLENGER tidak dieksekusi secara buta. Alokasi hanya dibuka jika terbentuk konfirmasi harga harian menembus batas atas konsolidasi (C1 Trigger) disertai volume minimal 1.5x dari rata-rata 30 hari.
+            </p>
+          </div>
+          <div class="pcard" style="border-left:4px solid var(--ink)">
+            <b style="font-size:16px;color:var(--ink)">Kriteria 2 · Posisi Stop-Loss Berbasis Struktur Dasar (Base Floor)</b>
+            <p style="margin-top:4px;font-size:13.5px">
+              Setiap entri dilindungi stop level persis 2–3% di bawah support dasar akumulasi. Karena dasar telah teruji &gt; 80 hari, pelanggaran ke bawah menandakan pembatalan tesis struktural (invalidation) dan posisi wajib ditutup tanpa kompromi.
+            </p>
+          </div>
+          <div class="pcard" style="border-left:4px solid #D97706">
+            <b style="font-size:16px;color:var(--ink)">Kriteria 3 · Disiplin Rebalancing &amp; Skalabilitas Portofolio</b>
+            <p style="margin-top:4px;font-size:13.5px">
+              Maksimal eksposur per kandidat Near-PRIME dibatasi 3–5% dari total AUM portofolio likuid. Keuntungan direalisasikan bertahap (trailing profit) saat harga mendekati Mayer Multiple &gt; 2.4 atau resistensi siklus berikutnya.
+            </p>
+          </div>
+        </div>
+        
+        <div style="display:flex;flex-direction:column;gap:14px;background:var(--soft);padding:20px;border-radius:10px;border:1px solid var(--line)">
+          <div class="rlabel">Institutional Disclaimer &amp; Risk Notice</div>
+          <p style="font-size:12.5px;color:var(--ink2);line-height:1.6;margin:0">
+            Laporan ini disusun oleh sistem analitik kuantitatif independen <b>BottomScreenr (SCR v10)</b> semata-mata untuk keperluan riset terstruktur dan edukasi pasar profesional. Laporan ini tidak mengandung rekomendasi investasi langsung atau nasihat keuangan individual.
+            <br><br>
+            Aset kripto memiliki volatilitas tinggi. Kinerja historis dan hasil backtest masa lalu tidak menjamin imbal hasil masa depan. Setiap keputusan alokasi modal adalah tanggung jawab independen pemodal institusional atau individu masing-masing.
+          </p>
+          <div style="margin-top:auto;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)">
+            Algoritma: Supply Concentration Reversal (SCR) v10.0<br>
+            Status Repositori: Standalone Deterministic Architecture<br>
+            Publikasi: Terbuka untuk Konsultasi Publik &amp; Institusi Riset
+          </div>
+        </div>
+      </div>
+      <div class="foot">© 2026 BottomScreenr Intelligence Research. Seluruh hak cipta dilindungi.</div>
+    </section>
+    
+        
+        <div class="vnav">
+          <div class="pg" id="pg">1 / 10</div>
+          <button id="mprev" title="Previous Slide">&larr;</button>
+          <button id="mnext" title="Next Slide">&rarr;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function() {
+  const frame = document.getElementById('frame');
+  const stage = document.getElementById('stage');
+  const slides = [...document.querySelectorAll('#stage > .slide')];
+  let cur = 0;
+  
+  const jump = document.getElementById('jump');
+  const pg = document.getElementById('pg');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const mprev = document.getElementById('mprev');
+  const mnext = document.getElementById('mnext');
+  const fsBtn = document.getElementById('fs');
+  
+  // Init dropdown
+  jump.innerHTML = slides.map((s, i) => `<option value="${i}">${i+1}. ${s.dataset.title || 'Slide'}</option>`).join('');
+  
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, idx) => s.hidden = (idx !== cur));
+    pg.textContent = (cur + 1) + ' / ' + slides.length;
+    prev.disabled = mprev.disabled = (cur === 0);
+    next.disabled = mnext.disabled = (cur === slides.length - 1);
+    jump.value = cur;
+  }
+  
+  prev.onclick = mprev.onclick = () => show(cur - 1);
+  next.onclick = mnext.onclick = () => show(cur + 1);
+  jump.onchange = (e) => show(+e.target.value);
+  
+  function fit() {
+    const fs = document.fullscreenElement != null;
+    const w = fs ? innerWidth : frame.clientWidth;
+    const h = fs ? innerHeight : frame.clientHeight;
+    const s = Math.min(w / 1600, h / 900);
+    stage.style.transform = `scale(${s})`;
+    if (fs) {
+      stage.style.position = 'absolute';
+      stage.style.left = ((w - 1600 * s) / 2) + 'px';
+      stage.style.top = ((h - 900 * s) / 2) + 'px';
+    } else {
+      stage.style.position = 'absolute';
+      stage.style.left = '0';
+      stage.style.top = '0';
+    }
+  }
+  
+  new ResizeObserver(fit).observe(frame);
+  window.addEventListener('resize', fit);
+  
+  function toggleFs() {
+    if (!document.fullscreenElement) {
+      frame.requestFullscreen ? frame.requestFullscreen() : frame.webkitRequestFullscreen();
+    } else {
+      document.exitFullscreen ? document.exitFullscreen() : document.webkitExitFullscreen();
+    }
+  }
+  
+  fsBtn.onclick = toggleFs;
+  document.addEventListener('fullscreenchange', fit);
+  document.addEventListener('webkitfullscreenchange', fit);
+  
+  window.addEventListener('keydown', (e) => {
+    if (e.target.closest('select,input,textarea')) return;
+    if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key)) {
+      e.preventDefault();
+      show(cur + 1);
+    } else if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) {
+      e.preventDefault();
+      show(cur - 1);
+    } else if (e.key === 'f' || e.key === 'F') {
+      e.preventDefault();
+      toggleFs();
+    }
+  });
+  
+  show(0);
+  fit();
+})();
+</script>
+
+</body>
+</html>

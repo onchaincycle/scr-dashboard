@@ -454,7 +454,8 @@
     </div>
 
     <div class="tab-nav">
-      <button class="tab-btn active" onclick="switchTab('crypto-prime', this)">🪙 Kripto: Terdekat ke PRIME</button>
+      <button class="tab-btn active" onclick="switchTab('crypto-prime', this)">🪙 Kripto: Terdekat ke PRIME (Long)</button>
+      <button class="tab-btn" onclick="switchTab('crypto-short', this)" style="color:#fb7185; border-color:rgba(244,63,94,0.4);"><span style="display:inline-block; transform:scale(1.1); margin-right:4px;">🔻</span> Radar Short Recommendation</button>
       <button class="tab-btn" onclick="switchTab('idx-candidates', this)">🇮🇩 Saham IDX: Akumulasi Wyckoff</button>
       <button class="tab-btn" onclick="switchTab('crypto-funnel', this)">⚙️ Funnel Eliminasi Kuantitatif</button>
     </div>
@@ -546,6 +547,210 @@
                 <td>21</td>
                 <td>2.0%</td>
                 <td class="need-col">SS kurang 4 poin, ES kurang 49 poin, fase 3-4 belum terverifikasi whale</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Short Recommendation (Wyckoff Distribution & Dilution Radar) -->
+    <div id="crypto-short" class="tab-pane">
+      <div class="data-card">
+        <!-- Panduan & Logika Scoring -->
+        <div style="margin-bottom: 20px; padding: 16px 18px; background: rgba(244, 63, 94, 0.07); border: 1px solid rgba(244, 63, 94, 0.28); border-radius: 12px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+            <b style="color: #fb7185; font-size: 14px; display:flex; align-items:center; gap:6px;">
+              <span>🛡️</span> Metodologi Scoring Kandidat Short Kuantitatif (Bobot 0 &minus; 100)
+            </b>
+            <span style="font-size:11.5px; padding:3px 8px; border-radius:6px; background:rgba(244, 63, 94, 0.15); color:#fda4af; font-family:'JetBrains Mono',monospace;">
+              Strategi Bi-Directional: Shorting Pasokan Berlebih
+            </span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 12.5px; line-height: 1.6; margin: 0 0 10px 0;">
+            Menyaring koin dengan asimetri penurunan harga tertinggi menggunakan kombinasi 3 pilar:
+            <b>1. Fundamental Tokenomik (Bobot 45%)</b>: Beban tebing unlock 30h (&gt;2.5% &ndash; 10%) &amp; 90h (&gt;6% &ndash; 25%), serta sirkulasi rendah (<i>low float</i> &lt; 30%) yang memicu inflasi agresif.
+            <b>2. Breakdown Teknikal (Bobot 40%)</b>: Patah struktur support, <i>death-cross</i> MA20 &lt; MA50, dan penurunan persisten (Drawdown 60 hari &gt; 15%).
+            <b>3. Overhang FDV/Market Cap (Bobot 15%)</b>: Rasio valuasi penuh terhadap kapitalisasi beredar &ge; 3.0x &ndash; 6.0x (bom waktu suplai tersembunyi).
+          </p>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 11.5px; padding-top: 10px; border-top: 1px solid rgba(244,63,94,0.18);">
+            <div><span style="color:#fb7185; font-weight:700;">Fase E &middot; Markdown:</span> Tren turun primer dominan, volume jual institusi menembus support.</div>
+            <div><span style="color:#fbbf24; font-weight:700;">Fase D &middot; LPSY:</span> <i>Last Point of Supply</i>; pantulan lemah gagal menembus resistance lama.</div>
+            <div><span style="color:#38bdf8; font-weight:700;">Fase C &middot; UTAD:</span> <i>Upthrust After Distribution</i>; relief rally semu jebakan ritel sebelum dump.</div>
+            <div><span style="color:#a78bfa; font-weight:700;">Exchange Perps:</span> Ketersediaan pair Short di Hyperliquid L1, Pionex Futures, &amp; AsterDex.</div>
+          </div>
+        </div>
+
+        <!-- Tabel Kandidat Short -->
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Koin</th>
+                <th style="text-align:center">Fase Siklus Wyckoff</th>
+                <th>Harga Spot</th>
+                <th title="Total Short Score (0-100)">Short Score</th>
+                <th title="Estimasi Unlock Suplai 30 Hari">Unl 30h</th>
+                <th title="Estimasi Unlock Suplai 90 Hari">Unl 90h</th>
+                <th title="Persentase Suplai Beredar">Float %</th>
+                <th title="Rasio FDV terhadap Market Cap">FDV/MC</th>
+                <th style="text-align:center" title="Tersedia di Hyperliquid Perpetual DEX">Hyperliquid</th>
+                <th style="text-align:center" title="Tersedia di Pionex Futures">Pionex</th>
+                <th style="text-align:center" title="Tersedia di AsterDex / Aggregator">AsterDex</th>
+                <th>Katalis Fundamental &amp; Setup Breakdown</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td class="title-col"><b>WLD</b> <span style="color:var(--text-muted); font-size:11.5px;">Worldcoin</span></td>
+                <td style="text-align:center"><span class="badge-tag badge-rose">Fase E &middot; Markdown</span></td>
+                <td>$0.557</td>
+                <td style="color:var(--accent-rose); font-weight:800; font-family:'JetBrains Mono',monospace; font-size:14px;">96</td>
+                <td style="color:var(--accent-rose); font-weight:700;">13.8%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">27.6%</td>
+                <td>21.2%</td>
+                <td style="color:var(--accent-amber); font-weight:700;">4.7x</td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3);">&#10003; Ada</span></td>
+                <td class="need-col">Emisi user grant harian masif, breakdown MA20 &lt; MA50, overhang FDV $2.5B vs MC $530M.</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td class="title-col"><b>STRK</b> <span style="color:var(--text-muted); font-size:11.5px;">Starknet</span></td>
+                <td style="text-align:center"><span class="badge-tag badge-rose">Fase E &middot; Markdown</span></td>
+                <td>$0.043</td>
+                <td style="color:var(--accent-rose); font-weight:800; font-family:'JetBrains Mono',monospace; font-size:14px;">92</td>
+                <td style="color:var(--accent-amber); font-weight:700;">4.8%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">14.2%</td>
+                <td>22.0%</td>
+                <td style="color:var(--accent-amber); font-weight:700;">4.5x</td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3);">&#10003; Ada</span></td>
+                <td class="need-col">Jadwal unlock investor tanggal 15 setiap bulan; tren struktural ATL (All-Time Low) persisten.</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td class="title-col"><b>AEVO</b> <span style="color:var(--text-muted); font-size:11.5px;">Aevo</span></td>
+                <td style="text-align:center"><span class="badge-tag badge-rose">Fase E &middot; Markdown</span></td>
+                <td>$0.041</td>
+                <td style="color:var(--accent-rose); font-weight:800; font-family:'JetBrains Mono',monospace; font-size:14px;">90</td>
+                <td style="color:var(--accent-rose); font-weight:700;">8.2%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">22.0%</td>
+                <td>28.5%</td>
+                <td style="color:var(--accent-amber); font-weight:700;">3.5x</td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3);">&#10003; Ada</span></td>
+                <td class="need-col">Tebing unlock 90h mencapai 22% total suplai; penurunan volume derivatif native protokol.</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td class="title-col"><b>EIGEN</b> <span style="color:var(--text-muted); font-size:11.5px;">EigenLayer</span></td>
+                <td style="text-align:center"><span class="badge-tag badge-amber">Fase D &middot; LPSY</span></td>
+                <td>$1.28</td>
+                <td style="color:var(--accent-rose); font-weight:800; font-family:'JetBrains Mono',monospace; font-size:14px;">88</td>
+                <td style="color:var(--accent-amber); font-weight:700;">3.5%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">11.0%</td>
+                <td>18.2%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">5.5x</td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3);">&#10003; Ada</span></td>
+                <td class="need-col">Overhang FDV ekstrem ($2.1B vs MC $380M); patah support $1.50 dan membentuk lower-high.</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td class="title-col"><b>W</b> <span style="color:var(--text-muted); font-size:11.5px;">Wormhole</span></td>
+                <td style="text-align:center"><span class="badge-tag badge-rose">Fase E &middot; Markdown</span></td>
+                <td>$0.088</td>
+                <td style="color:var(--accent-rose); font-weight:800; font-family:'JetBrains Mono',monospace; font-size:14px;">87</td>
+                <td style="color:var(--accent-rose); font-weight:700;">6.2%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">18.5%</td>
+                <td>26.0%</td>
+                <td style="color:var(--accent-amber); font-weight:700;">3.8x</td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3);">&#10003; Ada</span></td>
+                <td class="need-col">Tekanan jual airdrop &amp; vesting investor; tertolak berulang kali di resistance EMA20 harian.</td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td class="title-col"><b>ATH</b> <span style="color:var(--text-muted); font-size:11.5px;">Aethir</span></td>
+                <td style="text-align:center"><span class="badge-tag badge-rose">Fase E &middot; Markdown</span></td>
+                <td>$0.021</td>
+                <td style="color:var(--accent-rose); font-weight:800; font-family:'JetBrains Mono',monospace; font-size:14px;">85</td>
+                <td style="color:var(--accent-rose); font-weight:700;">5.5%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">16.0%</td>
+                <td>19.5%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">5.1x</td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3);">&#10003; Ada</span></td>
+                <td class="need-col">Emisi reward node DePIN konstan tanpa kenaikan permintaan spot pembeli, float &lt; 20%.</td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td class="title-col"><b>TIA</b> <span style="color:var(--text-muted); font-size:11.5px;">Celestia</span></td>
+                <td style="text-align:center"><span class="badge-tag badge-amber">Fase D &middot; LPSY</span></td>
+                <td>$0.447</td>
+                <td style="color:var(--accent-rose); font-weight:800; font-family:'JetBrains Mono',monospace; font-size:14px;">83</td>
+                <td style="color:var(--accent-amber); font-weight:700;">4.2%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">12.8%</td>
+                <td>32.0%</td>
+                <td style="color:var(--accent-amber); font-weight:700;">3.1x</td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3);">&#10003; Ada</span></td>
+                <td class="need-col">Pasca cliff unlock raksasa; relief rally tertahan keras di resistance MA50, setup short pantulan.</td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td class="title-col"><b>SAGA</b> <span style="color:var(--text-muted); font-size:11.5px;">Saga</span></td>
+                <td style="text-align:center"><span class="badge-tag badge-rose">Fase E &middot; Markdown</span></td>
+                <td>$0.295</td>
+                <td style="color:var(--accent-rose); font-weight:800; font-family:'JetBrains Mono',monospace; font-size:14px;">82</td>
+                <td style="color:var(--accent-amber); font-weight:700;">4.5%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">13.5%</td>
+                <td>17.8%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">5.6x</td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3);">&#10003; Ada</span></td>
+                <td class="need-col">Sirkulasi float sangat tipis (17.8%), risiko dumping investor awal sangat tinggi di setiap rally.</td>
+              </tr>
+              <tr>
+                <td>9</td>
+                <td class="title-col"><b>DYM</b> <span style="color:var(--text-muted); font-size:11.5px;">Dymension</span></td>
+                <td style="text-align:center"><span class="badge-tag badge-rose">Fase E &middot; Markdown</span></td>
+                <td>$0.520</td>
+                <td style="color:var(--accent-rose); font-weight:800; font-family:'JetBrains Mono',monospace; font-size:14px;">81</td>
+                <td style="color:var(--accent-amber); font-weight:700;">4.0%</td>
+                <td style="color:var(--accent-rose); font-weight:700;">12.0%</td>
+                <td>24.5%</td>
+                <td style="color:var(--accent-amber); font-weight:700;">4.1x</td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3);">&#10003; Ada</span></td>
+                <td class="need-col">Aktivitas ekosistem RollApp menyusut tajam; pasokan unlock linear mingguan menekan harga spot.</td>
+              </tr>
+              <tr>
+                <td>10</td>
+                <td class="title-col"><b>ZRO</b> <span style="color:var(--text-muted); font-size:11.5px;">LayerZero</span></td>
+                <td style="text-align:center"><span class="badge-tag badge-cyan">Fase C &middot; UTAD</span></td>
+                <td>$1.85</td>
+                <td style="color:var(--accent-rose); font-weight:800; font-family:'JetBrains Mono',monospace; font-size:14px;">80</td>
+                <td style="color:var(--accent-amber); font-weight:700;">3.0%</td>
+                <td style="color:var(--accent-amber); font-weight:700;">9.5%</td>
+                <td>25.0%</td>
+                <td style="color:var(--accent-amber); font-weight:700;">4.0x</td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">&#10003; Ada</span></td>
+                <td style="text-align:center"><span class="pill-badge" style="background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3);">&#10003; Ada</span></td>
+                <td class="need-col">Upthrust liquidity sweep sebelum breakdown support kunci, overhang vesting investor.</td>
               </tr>
             </tbody>
           </table>

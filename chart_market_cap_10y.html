@@ -10,12 +10,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   :root {
-    --bg-base: #08090d;
-    --bg-surface: #0f1118;
-    --bg-card: #141722;
-    --bg-card-hover: #1a1e2d;
+    --bg-base: #06070a;
+    --bg-card: rgba(15, 18, 28, 0.82);
+    --bg-card-solid: #0d101b;
     --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-prominent: rgba(255, 255, 255, 0.16);
+    --border-glow: rgba(56, 189, 248, 0.3);
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
@@ -24,20 +23,20 @@
     --accent-amber: #f59e0b;
     --accent-purple: #a855f7;
     --accent-gold: #fbbf24;
-    --accent-silver: #cbd5e1;
+    --accent-silver: #e2e8f0;
   }
 
   * { box-sizing: border-box; }
 
   body {
     margin: 0;
-    padding: 24px 20px;
-    background-color: #08090d;
+    padding: 24px 20px 48px;
+    background-color: var(--bg-base);
     background-image: 
-      radial-gradient(at 15% 15%, rgba(56, 189, 248, 0.08) 0px, transparent 40%),
-      radial-gradient(at 85% 85%, rgba(168, 85, 247, 0.07) 0px, transparent 45%);
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 99, 235, 0.18), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, rgba(168, 85, 247, 0.12), transparent 60%);
     background-attachment: fixed;
-    color: #f8fafc;
+    color: var(--text-primary);
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 14px;
     line-height: 1.5;
@@ -45,7 +44,7 @@
   }
 
   .container {
-    max-width: 1180px;
+    max-width: 1200px;
     margin: 0 auto;
   }
 
@@ -66,17 +65,17 @@
     color: #fff;
   }
   .brand-logo {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     background: linear-gradient(135deg, #f59e0b, #d97706);
-    border-radius: 9px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    color: #08090d;
-    font-size: 17px;
-    box-shadow: 0 2px 12px rgba(245, 158, 11, 0.35);
+    color: #06070a;
+    font-size: 18px;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
   }
   .nav-links {
     display: flex;
@@ -87,26 +86,29 @@
     text-decoration: none;
     font-size: 13px;
     font-weight: 500;
-    padding: 6px 14px;
+    padding: 7px 16px;
     border-radius: 99px;
     border: 1px solid var(--border-subtle);
     background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(8px);
     transition: all 0.2s ease;
   }
   .nav-link:hover {
     color: #fff;
-    border-color: var(--border-prominent);
+    border-color: rgba(255, 255, 255, 0.2);
     background: rgba(255, 255, 255, 0.08);
   }
 
-  /* Main Card */
+  /* Main Card with Glassmorphism */
   .card {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-    padding: 24px;
+    border-radius: 20px;
+    padding: 26px;
     margin-bottom: 24px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   .header-section {
@@ -115,15 +117,15 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
   }
 
   .title-group h1 {
-    font-size: 20px;
+    font-size: 21px;
     font-weight: 800;
     margin: 0 0 6px 0;
-    letter-spacing: -0.02em;
-    color: #fff;
+    letter-spacing: -0.025em;
+    color: #ffffff;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -137,9 +139,9 @@
   /* Switcher Buttons */
   .btn-group {
     display: inline-flex;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.45);
     padding: 4px;
-    border-radius: 10px;
+    border-radius: 12px;
     border: 1px solid var(--border-subtle);
     gap: 4px;
   }
@@ -147,9 +149,9 @@
     background: transparent;
     border: none;
     color: var(--text-secondary);
-    padding: 7px 16px;
-    border-radius: 7px;
-    font-size: 12px;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 12.5px;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
@@ -159,61 +161,64 @@
     color: #fff;
   }
   .btn.active {
-    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
     color: #ffffff;
-    box-shadow: 0 2px 14px rgba(37, 99, 235, 0.45);
+    box-shadow: 0 2px 14px rgba(37, 99, 235, 0.5);
   }
 
   /* Chart Container */
   .chart-wrapper {
     position: relative;
     width: 100%;
-    height: 420px;
-    margin: 10px 0 20px 0;
+    height: 440px;
+    margin: 10px 0 24px 0;
   }
 
   /* KPI Grid */
   .kpi-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(154px, 1fr));
     gap: 12px;
-    margin-top: 20px;
-    padding-top: 20px;
+    margin-top: 22px;
+    padding-top: 22px;
     border-top: 1px solid var(--border-subtle);
   }
   .kpi-box {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(13, 16, 27, 0.7);
     border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    padding: 12px 14px;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    border-radius: 14px;
+    padding: 14px 16px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .kpi-box:hover {
-    transform: translateY(-2px);
-    border-color: var(--border-prominent);
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   }
   .kpi-head {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 11px;
+    gap: 7px;
+    font-size: 11.5px;
     font-weight: 600;
     color: var(--text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
   }
   .kpi-dot {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     display: inline-block;
+    box-shadow: 0 0 8px currentColor;
   }
   .kpi-num {
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 800;
     color: #fff;
-    margin: 6px 0 2px 0;
+    margin: 6px 0 3px 0;
     font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.02em;
   }
   .kpi-sub {
     font-size: 11.5px;
@@ -228,44 +233,43 @@
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12.5px;
+    font-size: 13px;
   }
   th {
     text-align: right;
-    padding: 10px 12px;
+    padding: 12px 14px;
     color: var(--text-secondary);
     font-weight: 600;
-    font-size: 11px;
+    font-size: 11.5px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     border-bottom: 1px solid var(--border-subtle);
     background: rgba(0, 0, 0, 0.25);
   }
-  th:first-child { text-align: left; border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
-  th:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+  th:first-child { text-align: left; border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+  th:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
   td {
     text-align: right;
-    padding: 11px 12px;
+    padding: 13px 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     color: var(--text-secondary);
     font-family: 'JetBrains Mono', monospace;
   }
   td:first-child {
     text-align: left;
-    font-family: inherit;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 700;
-    color: #fff;
+    color: #ffffff;
   }
   tr:hover td {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.03);
   }
 
   .footer {
     text-align: center;
     font-size: 12px;
     color: var(--text-muted);
-    margin-top: 32px;
-    padding-bottom: 24px;
+    margin-top: 36px;
   }
   .footer a {
     color: var(--accent-blue);
@@ -281,8 +285,8 @@
     <a class="nav-brand" href="index.html">
       <div class="brand-logo">S</div>
       <div>
-        <strong style="font-size: 15px; display: block;">BottomScreenr SCR v10</strong>
-        <span style="font-size: 11px; color: var(--text-secondary);">Radar Siklus & Makro Lintas Aset</span>
+        <strong style="font-size: 16px; display: block; letter-spacing: -0.01em;">BottomScreenr SCR v10</strong>
+        <span style="font-size: 11.5px; color: var(--text-secondary);">Radar Siklus & Makro Lintas Aset Global</span>
       </div>
     </a>
     <div class="nav-links">
@@ -313,48 +317,48 @@
     <!-- KPI Grid -->
     <div class="kpi-grid">
       <div class="kpi-box">
-        <div class="kpi-head"><span class="kpi-dot" style="background:#f59e0b"></span> Real Estate</div>
+        <div class="kpi-head"><span class="kpi-dot" style="background:#f59e0b; color:#f59e0b;"></span> Real Estate</div>
         <div class="kpi-num">$338.6 T</div>
         <div class="kpi-sub">42.9% Pangsa Global</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-head"><span class="kpi-dot" style="background:#38bdf8"></span> Saham Dunia</div>
+        <div class="kpi-head"><span class="kpi-dot" style="background:#38bdf8; color:#38bdf8;"></span> Saham Dunia</div>
         <div class="kpi-num">$191.7 T</div>
         <div class="kpi-sub">24.3% (S&P $52.0T)</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-head"><span class="kpi-dot" style="background:#a855f7"></span> Utang & Obligasi</div>
+        <div class="kpi-head"><span class="kpi-dot" style="background:#a855f7; color:#a855f7;"></span> Utang & Obligasi</div>
         <div class="kpi-num">$136.7 T</div>
         <div class="kpi-sub">17.3% Pangsa Global</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-head"><span class="kpi-dot" style="background:#64748b"></span> Uang Kas (M2)</div>
+        <div class="kpi-head"><span class="kpi-dot" style="background:#94a3b8; color:#94a3b8;"></span> Uang Kas (M2)</div>
         <div class="kpi-num">$88.8 T</div>
         <div class="kpi-sub">11.2% Pangsa Global</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-head"><span class="kpi-dot" style="background:#fbbf24"></span> Emas Fisik</div>
+        <div class="kpi-head"><span class="kpi-dot" style="background:#fbbf24; color:#fbbf24;"></span> Emas Fisik</div>
         <div class="kpi-num">$28.0 T</div>
         <div class="kpi-sub">3.54% Pangsa Global</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-head"><span class="kpi-dot" style="background:#cbd5e1"></span> Perak Fisik</div>
+        <div class="kpi-head"><span class="kpi-dot" style="background:#cbd5e1; color:#cbd5e1;"></span> Perak Fisik</div>
         <div class="kpi-num">$4.00 T</div>
         <div class="kpi-sub">0.51% Pangsa Global</div>
       </div>
-      <div class="kpi-box" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.08);">
+      <div class="kpi-box" style="border-color: rgba(16, 185, 129, 0.45); background: rgba(16, 185, 129, 0.09);">
         <div class="kpi-head" style="color:#34d399">
-          <span class="kpi-dot" style="background:#10b981"></span> Aset Kripto
+          <span class="kpi-dot" style="background:#10b981; color:#10b981;"></span> Aset Kripto
         </div>
         <div class="kpi-num" style="color:#34d399">$2.17 T</div>
-        <div class="kpi-sub" style="color:#a7f3d0">0.28% (BTC $1.19T)</div>
+        <div class="kpi-sub" style="color:#6ee7b7">0.28% (BTC $1.19T)</div>
       </div>
     </div>
   </div>
 
   <!-- Historical Table Card -->
   <div class="card">
-    <h3 style="margin: 0 0 14px 0; font-size: 15px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px;">
+    <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px;">
       <span>📋</span> Milestone Deret Waktu Per Kuartal 4 (10 Tahun Terakhir)
     </h3>
     <div class="table-responsive">
@@ -377,7 +381,7 @@
         <tbody>
           <tr>
             <td>Q4 2016</td>
-            <td style="color:#fff; font-weight:600;">$368.8 T</td>
+            <td style="color:#ffffff; font-weight:700;">$368.8 T</td>
             <td>$168.8 T</td>
             <td>$60.6 T</td>
             <td>$16.4 T</td>
@@ -390,7 +394,7 @@
           </tr>
           <tr>
             <td>Q4 2017</td>
-            <td style="color:#fff; font-weight:600;">$400.9 T</td>
+            <td style="color:#ffffff; font-weight:700;">$400.9 T</td>
             <td>$181.3 T</td>
             <td>$72.5 T</td>
             <td>$19.6 T</td>
@@ -403,7 +407,7 @@
           </tr>
           <tr>
             <td>Q4 2018</td>
-            <td style="color:#fff; font-weight:600;">$406.8 T</td>
+            <td style="color:#ffffff; font-weight:700;">$406.8 T</td>
             <td>$188.2 T</td>
             <td>$66.3 T</td>
             <td>$18.0 T</td>
@@ -416,7 +420,7 @@
           </tr>
           <tr>
             <td>Q4 2019</td>
-            <td style="color:#fff; font-weight:600;">$438.7 T</td>
+            <td style="color:#ffffff; font-weight:700;">$438.7 T</td>
             <td>$194.0 T</td>
             <td>$82.7 T</td>
             <td>$22.4 T</td>
@@ -429,7 +433,7 @@
           </tr>
           <tr>
             <td>Q4 2020</td>
-            <td style="color:#fff; font-weight:600;">$507.1 T</td>
+            <td style="color:#ffffff; font-weight:700;">$507.1 T</td>
             <td>$219.3 T</td>
             <td>$99.1 T</td>
             <td>$26.9 T</td>
@@ -442,7 +446,7 @@
           </tr>
           <tr>
             <td>Q4 2021</td>
-            <td style="color:#fff; font-weight:600;">$594.8 T</td>
+            <td style="color:#ffffff; font-weight:700;">$594.8 T</td>
             <td>$266.1 T</td>
             <td>$123.4 T</td>
             <td>$33.4 T</td>
@@ -455,7 +459,7 @@
           </tr>
           <tr>
             <td>Q4 2022</td>
-            <td style="color:#fff; font-weight:600;">$594.8 T</td>
+            <td style="color:#ffffff; font-weight:700;">$594.8 T</td>
             <td>$284.8 T</td>
             <td>$99.0 T</td>
             <td>$26.8 T</td>
@@ -468,7 +472,7 @@
           </tr>
           <tr>
             <td>Q4 2023</td>
-            <td style="color:#fff; font-weight:600;">$640.2 T</td>
+            <td style="color:#ffffff; font-weight:700;">$640.2 T</td>
             <td>$304.2 T</td>
             <td>$119.0 T</td>
             <td>$32.2 T</td>
@@ -481,7 +485,7 @@
           </tr>
           <tr>
             <td>Q4 2024</td>
-            <td style="color:#fff; font-weight:600;">$692.8 T</td>
+            <td style="color:#ffffff; font-weight:700;">$692.8 T</td>
             <td>$318.9 T</td>
             <td>$143.2 T</td>
             <td>$38.8 T</td>
@@ -494,7 +498,7 @@
           </tr>
           <tr>
             <td>Q4 2025</td>
-            <td style="color:#fff; font-weight:600;">$749.9 T</td>
+            <td style="color:#ffffff; font-weight:700;">$749.9 T</td>
             <td>$325.5 T</td>
             <td>$168.5 T</td>
             <td>$45.7 T</td>
@@ -507,7 +511,7 @@
           </tr>
           <tr>
             <td>Q2 2026</td>
-            <td style="color:#fff; font-weight:600;">$789.9 T</td>
+            <td style="color:#ffffff; font-weight:700;">$789.9 T</td>
             <td>$338.6 T</td>
             <td>$191.7 T</td>
             <td>$52.0 T</td>
@@ -546,13 +550,13 @@ function renderChart(mode) {
       data: {
         labels: DATA.labels,
         datasets: [
-          { label: 'Aset Kripto', data: DATA.crypto, backgroundColor: 'rgba(16, 185, 129, 0.85)', borderColor: '#10b981', fill: true, tension: 0.25 },
-          { label: 'Perak Fisik', data: DATA.silver, backgroundColor: 'rgba(203, 213, 225, 0.75)', borderColor: '#cbd5e1', fill: true, tension: 0.25 },
-          { label: 'Emas Fisik', data: DATA.gold, backgroundColor: 'rgba(251, 191, 36, 0.85)', borderColor: '#fbbf24', fill: true, tension: 0.25 },
-          { label: 'Uang M2 (Kas)', data: DATA.m2, backgroundColor: 'rgba(100, 116, 139, 0.75)', borderColor: '#64748b', fill: true, tension: 0.25 },
-          { label: 'Utang & Obligasi', data: DATA.debt, backgroundColor: 'rgba(168, 85, 247, 0.75)', borderColor: '#a855f7', fill: true, tension: 0.25 },
-          { label: 'Pasar Saham', data: DATA.eq, backgroundColor: 'rgba(56, 189, 248, 0.75)', borderColor: '#38bdf8', fill: true, tension: 0.25 },
-          { label: 'Real Estate', data: DATA.re, backgroundColor: 'rgba(245, 158, 11, 0.75)', borderColor: '#f59e0b', fill: true, tension: 0.25 },
+          { label: 'Aset Kripto', data: DATA.crypto, backgroundColor: 'rgba(16, 185, 129, 0.9)', borderColor: '#10b981', fill: true, tension: 0.25 },
+          { label: 'Perak Fisik', data: DATA.silver, backgroundColor: 'rgba(203, 213, 225, 0.8)', borderColor: '#cbd5e1', fill: true, tension: 0.25 },
+          { label: 'Emas Fisik', data: DATA.gold, backgroundColor: 'rgba(251, 191, 36, 0.9)', borderColor: '#fbbf24', fill: true, tension: 0.25 },
+          { label: 'Uang M2 (Kas)', data: DATA.m2, backgroundColor: 'rgba(100, 116, 139, 0.8)', borderColor: '#64748b', fill: true, tension: 0.25 },
+          { label: 'Utang & Obligasi', data: DATA.debt, backgroundColor: 'rgba(168, 85, 247, 0.8)', borderColor: '#a855f7', fill: true, tension: 0.25 },
+          { label: 'Pasar Saham', data: DATA.eq, backgroundColor: 'rgba(56, 189, 248, 0.8)', borderColor: '#38bdf8', fill: true, tension: 0.25 },
+          { label: 'Real Estate', data: DATA.re, backgroundColor: 'rgba(245, 158, 11, 0.8)', borderColor: '#f59e0b', fill: true, tension: 0.25 },
         ]
       },
       options: {
@@ -562,15 +566,17 @@ function renderChart(mode) {
         plugins: {
           legend: {
             position: 'top',
-            labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' }, boxWidth: 14, padding: 14 }
+            labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 11.5, weight: '600' }, boxWidth: 14, padding: 16 }
           },
           tooltip: {
-            backgroundColor: '#0f1118',
-            titleColor: '#fff',
-            bodyColor: '#cbd5e1',
-            borderColor: 'rgba(255,255,255,0.15)',
+            backgroundColor: '#0d101b',
+            titleColor: '#ffffff',
+            bodyColor: '#e2e8f0',
+            borderColor: 'rgba(255,255,255,0.18)',
             borderWidth: 1,
-            padding: 12,
+            padding: 14,
+            boxPadding: 6,
+            usePointStyle: true,
             callbacks: {
               label: (c) => ` ${c.dataset.label}: $${c.parsed.y.toLocaleString()} T`,
               footer: (items) => {
@@ -584,7 +590,7 @@ function renderChart(mode) {
           x: {
             stacked: true,
             grid: { color: 'rgba(255,255,255,0.06)' },
-            ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 10 }, maxTicksLimit: 14 }
+            ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 10.5 }, maxTicksLimit: 14 }
           },
           y: {
             stacked: true,
@@ -621,15 +627,15 @@ function renderChart(mode) {
         plugins: {
           legend: {
             position: 'top',
-            labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' }, boxWidth: 14, padding: 14 }
+            labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 11.5, weight: '600' }, boxWidth: 14, padding: 16 }
           },
           tooltip: {
-            backgroundColor: '#0f1118',
-            titleColor: '#fff',
-            bodyColor: '#cbd5e1',
-            borderColor: 'rgba(255,255,255,0.15)',
+            backgroundColor: '#0d101b',
+            titleColor: '#ffffff',
+            bodyColor: '#e2e8f0',
+            borderColor: 'rgba(255,255,255,0.18)',
             borderWidth: 1,
-            padding: 12,
+            padding: 14,
             callbacks: {
               label: (c) => ` ${c.dataset.label}: ${c.parsed.y.toFixed(2)}%`
             }
@@ -639,7 +645,7 @@ function renderChart(mode) {
           x: {
             stacked: true,
             grid: { color: 'rgba(255,255,255,0.06)' },
-            ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 10 }, maxTicksLimit: 14 }
+            ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 10.5 }, maxTicksLimit: 14 }
           },
           y: {
             stacked: true,
@@ -661,10 +667,10 @@ function renderChart(mode) {
       data: {
         labels: DATA.labels,
         datasets: [
-          { label: 'S&P 500 Market Cap', data: DATA.sp500, borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.1)', borderWidth: 3, tension: 0.25 },
-          { label: 'Emas Fisik Mcap', data: DATA.gold, borderColor: '#fbbf24', backgroundColor: 'rgba(251,191,36,0.1)', borderWidth: 3, tension: 0.25 },
-          { label: 'Perak Fisik Mcap', data: DATA.silver, borderColor: '#cbd5e1', backgroundColor: 'rgba(203,213,225,0.1)', borderWidth: 2, tension: 0.25 },
-          { label: 'Kripto Total Mcap', data: DATA.crypto, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.2)', borderWidth: 3, tension: 0.25 }
+          { label: 'S&P 500 Market Cap', data: DATA.sp500, borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.15)', borderWidth: 3.5, tension: 0.25 },
+          { label: 'Emas Fisik Mcap', data: DATA.gold, borderColor: '#fbbf24', backgroundColor: 'rgba(251,191,36,0.15)', borderWidth: 3.5, tension: 0.25 },
+          { label: 'Perak Fisik Mcap', data: DATA.silver, borderColor: '#e2e8f0', backgroundColor: 'rgba(226,232,240,0.15)', borderWidth: 2.5, tension: 0.25 },
+          { label: 'Kripto Total Mcap', data: DATA.crypto, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.25)', borderWidth: 3.5, tension: 0.25 }
         ]
       },
       options: {
@@ -674,15 +680,15 @@ function renderChart(mode) {
         plugins: {
           legend: {
             position: 'top',
-            labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' }, boxWidth: 14, padding: 14 }
+            labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 11.5, weight: '600' }, boxWidth: 14, padding: 16 }
           },
           tooltip: {
-            backgroundColor: '#0f1118',
-            titleColor: '#fff',
-            bodyColor: '#cbd5e1',
-            borderColor: 'rgba(255,255,255,0.15)',
+            backgroundColor: '#0d101b',
+            titleColor: '#ffffff',
+            bodyColor: '#e2e8f0',
+            borderColor: 'rgba(255,255,255,0.18)',
             borderWidth: 1,
-            padding: 12,
+            padding: 14,
             callbacks: {
               label: (c) => ` ${c.dataset.label}: $${c.parsed.y.toLocaleString()} T`
             }
@@ -691,7 +697,7 @@ function renderChart(mode) {
         scales: {
           x: {
             grid: { color: 'rgba(255,255,255,0.06)' },
-            ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 10 }, maxTicksLimit: 14 }
+            ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 10.5 }, maxTicksLimit: 14 }
           },
           y: {
             grid: { color: 'rgba(255,255,255,0.06)' },

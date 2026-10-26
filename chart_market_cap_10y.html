@@ -3,345 +3,530 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Market Cap Seluruh Kelas Aset Global (10 Tahun Terakhir)</title>
+<title>Kapitalisasi Pasar Seluruh Kelas Aset Global (10 Tahun Terakhir) | SCR v10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --bg-base: #08090d;
+    --bg-surface: #0f1118;
+    --bg-card: #141722;
+    --bg-card-hover: #1a1e2d;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-prominent: rgba(255, 255, 255, 0.16);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent-blue: #38bdf8;
+    --accent-emerald: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-purple: #a855f7;
+    --accent-gold: #fbbf24;
+    --accent-silver: #cbd5e1;
   }
+
+  * { box-sizing: border-box; }
+
   body {
     margin: 0;
-    padding: 12px;
-    background: transparent;
-    color: var(--foreground, #e2e8f0);
+    padding: 24px 20px;
+    background-color: #08090d;
+    background-image: 
+      radial-gradient(at 15% 15%, rgba(56, 189, 248, 0.08) 0px, transparent 40%),
+      radial-gradient(at 85% 85%, rgba(168, 85, 247, 0.07) 0px, transparent 45%);
+    background-attachment: fixed;
+    color: #f8fafc;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* Navigation Bar */
+  .top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #fff;
+  }
+  .brand-logo {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #08090d;
+    font-size: 17px;
+    box-shadow: 0 2px 12px rgba(245, 158, 11, 0.35);
+  }
+  .nav-links {
+    display: flex;
+    gap: 10px;
+  }
+  .nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
     font-size: 13px;
-    line-height: 1.4;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 99px;
+    border: 1px solid var(--border-subtle);
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.2s ease;
   }
+  .nav-link:hover {
+    color: #fff;
+    border-color: var(--border-prominent);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Main Card */
   .card {
-    background: var(--card, rgba(30, 41, 59, 0.7));
-    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   }
-  .header {
+
+  .header-section {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
   }
-  .title {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--foreground, #fff);
+
+  .title-group h1 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.02em;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .title-group p {
     margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 13px;
   }
-  .subtitle {
-    font-size: 11px;
-    color: var(--muted-foreground, #94a3b8);
-    margin: 2px 0 0 0;
-  }
+
+  /* Switcher Buttons */
   .btn-group {
-    display: flex;
-    gap: 6px;
-    background: rgba(0,0,0,0.25);
-    padding: 3px;
-    border-radius: 6px;
-    border: 1px solid var(--border, rgba(255,255,255,0.08));
+    display: inline-flex;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--border-subtle);
+    gap: 4px;
   }
   .btn {
     background: transparent;
     border: none;
-    color: var(--muted-foreground, #94a3b8);
-    padding: 5px 12px;
-    border-radius: 4px;
-    font-size: 11px;
+    color: var(--text-secondary);
+    padding: 7px 16px;
+    border-radius: 7px;
+    font-size: 12px;
     font-weight: 600;
+    font-family: inherit;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
   }
-  .btn.active, .btn:hover {
-    background: var(--accent, #3b82f6);
+  .btn:hover {
+    color: #fff;
+  }
+  .btn.active {
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
     color: #ffffff;
+    box-shadow: 0 2px 14px rgba(37, 99, 235, 0.45);
   }
-  .chart-container {
+
+  /* Chart Container */
+  .chart-wrapper {
     position: relative;
     width: 100%;
-    height: 380px;
+    height: 420px;
+    margin: 10px 0 20px 0;
   }
-  .metrics-grid {
+
+  /* KPI Grid */
+  .kpi-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 10px;
-    margin-top: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-subtle);
   }
-  .metric-box {
-    background: rgba(0,0,0,0.2);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 6px;
-    padding: 8px 10px;
+  .kpi-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 12px 14px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
   }
-  .metric-label {
-    font-size: 10px;
-    color: var(--muted-foreground, #94a3b8);
-    text-transform: uppercase;
-    font-weight: 600;
+  .kpi-box:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-prominent);
+  }
+  .kpi-head {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
-  .metric-val {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--foreground, #fff);
-    margin-top: 3px;
+  .kpi-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
   }
-  .metric-sub {
-    font-size: 10px;
-    color: #34d399;
+  .kpi-num {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    margin: 6px 0 2px 0;
+    font-family: 'JetBrains Mono', monospace;
   }
-  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .kpi-sub {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* Table Style */
+  .table-responsive {
+    overflow-x: auto;
+  }
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 11px;
-    margin-top: 12px;
+    font-size: 12.5px;
   }
-  th { text-align: right; padding: 6px; color: var(--muted-foreground, #94a3b8); border-bottom: 1px solid var(--border, rgba(255,255,255,0.1)); }
-  th:first-child { text-align: left; }
-  td { text-align: right; padding: 6px; border-bottom: 1px solid rgba(255,255,255,0.04); }
-  td:first-child { text-align: left; font-weight: 600; }
+  th {
+    text-align: right;
+    padding: 10px 12px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(0, 0, 0, 0.25);
+  }
+  th:first-child { text-align: left; border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+  th:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+  td {
+    text-align: right;
+    padding: 11px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  td:first-child {
+    text-align: left;
+    font-family: inherit;
+    font-weight: 700;
+    color: #fff;
+  }
+  tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 32px;
+    padding-bottom: 24px;
+  }
+  .footer a {
+    color: var(--accent-blue);
+    text-decoration: none;
+  }
 </style>
 </head>
 <body>
 
-<div class="card">
-  <div class="header">
-    <div>
-      <h2 class="title">📊 Pertumbuhan Market Cap Seluruh Kelas Aset Global (2016 – 2026)</h2>
-      <p class="subtitle">Deret Waktu 42 Kuartal: Real Estate, Equities, Debt, M2, Gold, Silver & Digital Assets (FRED, BIS, WGC, CoinGecko)</p>
-    </div>
-    <div class="btn-group">
-      <button class="btn active" onclick="switchMode('nominal')">Valuasi ($ Triliun)</button>
-      <button class="btn" onclick="switchMode('share')">Pangsa Pasar (%)</button>
-      <button class="btn" onclick="switchMode('growth')">Likuid & Kripto</button>
+<div class="container">
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <a class="nav-brand" href="index.html">
+      <div class="brand-logo">S</div>
+      <div>
+        <strong style="font-size: 15px; display: block;">BottomScreenr SCR v10</strong>
+        <span style="font-size: 11px; color: var(--text-secondary);">Radar Siklus & Makro Lintas Aset</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">← Beranda SCR</a>
+      <a class="nav-link" href="desktop.html">Dashboard</a>
+      <a class="nav-link" href="desktop.html#/makro">Makro Mingguan</a>
     </div>
   </div>
 
-  <div class="chart-container">
-    <canvas id="mcapChart"></canvas>
+  <!-- Main Chart Card -->
+  <div class="card">
+    <div class="header-section">
+      <div class="title-group">
+        <h1>📊 Kapitalisasi Pasar Seluruh Kelas Aset Global (2016 – 2026)</h1>
+        <p>Deret Waktu 42 Kuartal: Real Estate, Equities, Debt, M2, Gold, Silver & Digital Assets (FRED Z.1, BIS, WGC, CoinGecko)</p>
+      </div>
+      <div class="btn-group">
+        <button class="btn active" onclick="switchMode('nominal')">Valuasi ($ Triliun)</button>
+        <button class="btn" onclick="switchMode('share')">Pangsa Pasar (%)</button>
+        <button class="btn" onclick="switchMode('growth')">Likuid & Kripto</button>
+      </div>
+    </div>
+
+    <div class="chart-wrapper">
+      <canvas id="mcapChart"></canvas>
+    </div>
+
+    <!-- KPI Grid -->
+    <div class="kpi-grid">
+      <div class="kpi-box">
+        <div class="kpi-head"><span class="kpi-dot" style="background:#f59e0b"></span> Real Estate</div>
+        <div class="kpi-num">$338.6 T</div>
+        <div class="kpi-sub">42.9% Pangsa Global</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-head"><span class="kpi-dot" style="background:#38bdf8"></span> Saham Dunia</div>
+        <div class="kpi-num">$191.7 T</div>
+        <div class="kpi-sub">24.3% (S&P $52.0T)</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-head"><span class="kpi-dot" style="background:#a855f7"></span> Utang & Obligasi</div>
+        <div class="kpi-num">$136.7 T</div>
+        <div class="kpi-sub">17.3% Pangsa Global</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-head"><span class="kpi-dot" style="background:#64748b"></span> Uang Kas (M2)</div>
+        <div class="kpi-num">$88.8 T</div>
+        <div class="kpi-sub">11.2% Pangsa Global</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-head"><span class="kpi-dot" style="background:#fbbf24"></span> Emas Fisik</div>
+        <div class="kpi-num">$28.0 T</div>
+        <div class="kpi-sub">3.54% Pangsa Global</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-head"><span class="kpi-dot" style="background:#cbd5e1"></span> Perak Fisik</div>
+        <div class="kpi-num">$4.00 T</div>
+        <div class="kpi-sub">0.51% Pangsa Global</div>
+      </div>
+      <div class="kpi-box" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.08);">
+        <div class="kpi-head" style="color:#34d399">
+          <span class="kpi-dot" style="background:#10b981"></span> Aset Kripto
+        </div>
+        <div class="kpi-num" style="color:#34d399">$2.17 T</div>
+        <div class="kpi-sub" style="color:#a7f3d0">0.28% (BTC $1.19T)</div>
+      </div>
+    </div>
   </div>
 
-  <div class="metrics-grid">
-    <div class="metric-box">
-      <div class="metric-label"><span class="dot" style="background:#f59e0b"></span> Real Estate</div>
-      <div class="metric-val">$338.6 T</div>
-      <div class="metric-sub">42.9% Total Global</div>
-    </div>
-    <div class="metric-box">
-      <div class="metric-label"><span class="dot" style="background:#3b82f6"></span> Saham Dunia</div>
-      <div class="metric-val">$191.7 T</div>
-      <div class="metric-sub">24.3% (S&P $52T)</div>
-    </div>
-    <div class="metric-box">
-      <div class="metric-label"><span class="dot" style="background:#8b5cf6"></span> Utang & Obligasi</div>
-      <div class="metric-val">$136.7 T</div>
-      <div class="metric-sub">17.3% Total Global</div>
-    </div>
-    <div class="metric-box">
-      <div class="metric-label"><span class="dot" style="background:#64748b"></span> Uang Kas (M2)</div>
-      <div class="metric-val">$88.8 T</div>
-      <div class="metric-sub">11.2% Total Global</div>
-    </div>
-    <div class="metric-box">
-      <div class="metric-label"><span class="dot" style="background:#eab308"></span> Emas Fisik</div>
-      <div class="metric-val">$28.0 T</div>
-      <div class="metric-sub">3.54% Total Global</div>
-    </div>
-    <div class="metric-box">
-      <div class="metric-label"><span class="dot" style="background:#a1a1aa"></span> Perak Fisik</div>
-      <div class="metric-val">$4.00 T</div>
-      <div class="metric-sub">0.51% Total Global</div>
-    </div>
-    <div class="metric-box">
-      <div class="metric-label"><span class="dot" style="background:#10b981"></span> Aset Kripto</div>
-      <div class="metric-val">$2.17 T</div>
-      <div class="metric-sub">0.28% (BTC $1.19T)</div>
+  <!-- Historical Table Card -->
+  <div class="card">
+    <h3 style="margin: 0 0 14px 0; font-size: 15px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px;">
+      <span>📋</span> Milestone Deret Waktu Per Kuartal 4 (10 Tahun Terakhir)
+    </h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Periode</th>
+            <th>Total Kekayaan</th>
+            <th>Real Estate</th>
+            <th>Saham Global</th>
+            <th>S&P 500</th>
+            <th>Obligasi</th>
+            <th>M2 (Kas)</th>
+            <th>Emas</th>
+            <th>Perak</th>
+            <th>Kripto</th>
+            <th>Share Kripto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Q4 2016</td>
+            <td style="color:#fff; font-weight:600;">$368.8 T</td>
+            <td>$168.8 T</td>
+            <td>$60.6 T</td>
+            <td>$16.4 T</td>
+            <td>$79.3 T</td>
+            <td>$51.2 T</td>
+            <td>$7.9 T</td>
+            <td>$1.1 T</td>
+            <td style="color:#34d399; font-weight:700;">$0.03 T</td>
+            <td style="color:#fbbf24; font-weight:700;">0.008%</td>
+          </tr>
+          <tr>
+            <td>Q4 2017</td>
+            <td style="color:#fff; font-weight:600;">$400.9 T</td>
+            <td>$181.3 T</td>
+            <td>$72.5 T</td>
+            <td>$19.6 T</td>
+            <td>$83.0 T</td>
+            <td>$53.8 T</td>
+            <td>$8.9 T</td>
+            <td>$0.9 T</td>
+            <td style="color:#34d399; font-weight:700;">$0.43 T</td>
+            <td style="color:#fbbf24; font-weight:700;">0.108%</td>
+          </tr>
+          <tr>
+            <td>Q4 2018</td>
+            <td style="color:#fff; font-weight:600;">$406.8 T</td>
+            <td>$188.2 T</td>
+            <td>$66.3 T</td>
+            <td>$18.0 T</td>
+            <td>$87.0 T</td>
+            <td>$55.6 T</td>
+            <td>$8.7 T</td>
+            <td>$0.8 T</td>
+            <td style="color:#34d399; font-weight:700;">$0.12 T</td>
+            <td style="color:#fbbf24; font-weight:700;">0.030%</td>
+          </tr>
+          <tr>
+            <td>Q4 2019</td>
+            <td style="color:#fff; font-weight:600;">$438.7 T</td>
+            <td>$194.0 T</td>
+            <td>$82.7 T</td>
+            <td>$22.4 T</td>
+            <td>$91.2 T</td>
+            <td>$59.2 T</td>
+            <td>$10.3 T</td>
+            <td>$1.0 T</td>
+            <td style="color:#34d399; font-weight:700;">$0.24 T</td>
+            <td style="color:#fbbf24; font-weight:700;">0.056%</td>
+          </tr>
+          <tr>
+            <td>Q4 2020</td>
+            <td style="color:#fff; font-weight:600;">$507.1 T</td>
+            <td>$219.3 T</td>
+            <td>$99.1 T</td>
+            <td>$26.9 T</td>
+            <td>$100.4 T</td>
+            <td>$73.2 T</td>
+            <td>$12.9 T</td>
+            <td>$1.3 T</td>
+            <td style="color:#34d399; font-weight:700;">$0.89 T</td>
+            <td style="color:#fbbf24; font-weight:700;">0.175%</td>
+          </tr>
+          <tr>
+            <td>Q4 2021</td>
+            <td style="color:#fff; font-weight:600;">$594.8 T</td>
+            <td>$266.1 T</td>
+            <td>$123.4 T</td>
+            <td>$33.4 T</td>
+            <td>$107.4 T</td>
+            <td>$82.5 T</td>
+            <td>$12.5 T</td>
+            <td>$1.2 T</td>
+            <td style="color:#34d399; font-weight:700;">$1.63 T</td>
+            <td style="color:#fbbf24; font-weight:700;">0.274%</td>
+          </tr>
+          <tr>
+            <td>Q4 2022</td>
+            <td style="color:#fff; font-weight:600;">$594.8 T</td>
+            <td>$284.8 T</td>
+            <td>$99.0 T</td>
+            <td>$26.8 T</td>
+            <td>$113.2 T</td>
+            <td>$83.7 T</td>
+            <td>$12.5 T</td>
+            <td>$1.0 T</td>
+            <td style="color:#34d399; font-weight:700;">$0.58 T</td>
+            <td style="color:#fbbf24; font-weight:700;">0.098%</td>
+          </tr>
+          <tr>
+            <td>Q4 2023</td>
+            <td style="color:#fff; font-weight:600;">$640.2 T</td>
+            <td>$304.2 T</td>
+            <td>$119.0 T</td>
+            <td>$32.2 T</td>
+            <td>$119.2 T</td>
+            <td>$80.9 T</td>
+            <td>$14.2 T</td>
+            <td>$1.2 T</td>
+            <td style="color:#34d399; font-weight:700;">$1.50 T</td>
+            <td style="color:#fbbf24; font-weight:700;">0.235%</td>
+          </tr>
+          <tr>
+            <td>Q4 2024</td>
+            <td style="color:#fff; font-weight:600;">$692.8 T</td>
+            <td>$318.9 T</td>
+            <td>$143.2 T</td>
+            <td>$38.8 T</td>
+            <td>$124.4 T</td>
+            <td>$83.2 T</td>
+            <td>$18.0 T</td>
+            <td>$1.8 T</td>
+            <td style="color:#34d399; font-weight:700;">$3.37 T</td>
+            <td style="color:#fbbf24; font-weight:700;">0.486%</td>
+          </tr>
+          <tr>
+            <td>Q4 2025</td>
+            <td style="color:#fff; font-weight:600;">$749.9 T</td>
+            <td>$325.5 T</td>
+            <td>$168.5 T</td>
+            <td>$45.7 T</td>
+            <td>$132.2 T</td>
+            <td>$86.8 T</td>
+            <td>$31.1 T</td>
+            <td>$2.6 T</td>
+            <td style="color:#34d399; font-weight:700;">$3.19 T</td>
+            <td style="color:#fbbf24; font-weight:700;">0.425%</td>
+          </tr>
+          <tr>
+            <td>Q2 2026</td>
+            <td style="color:#fff; font-weight:600;">$789.9 T</td>
+            <td>$338.6 T</td>
+            <td>$191.7 T</td>
+            <td>$52.0 T</td>
+            <td>$136.7 T</td>
+            <td>$88.8 T</td>
+            <td>$28.0 T</td>
+            <td>$4.0 T</td>
+            <td style="color:#34d399; font-weight:700;">$2.17 T</td>
+            <td style="color:#fbbf24; font-weight:700;">0.275%</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-</div>
 
-<div class="card">
-  <h3 style="margin:0 0 8px 0; font-size:13px; font-weight:700; color:var(--foreground, #fff);">
-    📋 Ringkasan Milestone Historis 10 Tahun (Kuartal 4 Tiap Tahun)
-  </h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Periode</th>
-        <th>Total Kekayaan</th>
-        <th>Real Estate</th>
-        <th>Saham Global</th>
-        <th>S&P 500</th>
-        <th>Obligasi</th>
-        <th>M2 (Kas)</th>
-        <th>Emas</th>
-        <th>Perak</th>
-        <th>Kripto</th>
-        <th>Share Kripto</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Q4 2016</td>
-        <td>$368.8 T</td>
-        <td>$168.8 T</td>
-        <td>$60.6 T</td>
-        <td>$16.4 T</td>
-        <td>$79.3 T</td>
-        <td>$51.2 T</td>
-        <td>$7.9 T</td>
-        <td>$1.1 T</td>
-        <td style="color:#34d399;font-weight:600">$0.03 T</td>
-        <td style="color:#fbbf24;font-weight:600">0.008%</td>
-      </tr>
-      <tr>
-        <td>Q4 2017</td>
-        <td>$400.9 T</td>
-        <td>$181.3 T</td>
-        <td>$72.5 T</td>
-        <td>$19.6 T</td>
-        <td>$83.0 T</td>
-        <td>$53.8 T</td>
-        <td>$8.9 T</td>
-        <td>$0.9 T</td>
-        <td style="color:#34d399;font-weight:600">$0.43 T</td>
-        <td style="color:#fbbf24;font-weight:600">0.108%</td>
-      </tr>
-      <tr>
-        <td>Q4 2018</td>
-        <td>$406.8 T</td>
-        <td>$188.2 T</td>
-        <td>$66.3 T</td>
-        <td>$18.0 T</td>
-        <td>$87.0 T</td>
-        <td>$55.6 T</td>
-        <td>$8.7 T</td>
-        <td>$0.8 T</td>
-        <td style="color:#34d399;font-weight:600">$0.12 T</td>
-        <td style="color:#fbbf24;font-weight:600">0.030%</td>
-      </tr>
-      <tr>
-        <td>Q4 2019</td>
-        <td>$438.7 T</td>
-        <td>$194.0 T</td>
-        <td>$82.7 T</td>
-        <td>$22.4 T</td>
-        <td>$91.2 T</td>
-        <td>$59.2 T</td>
-        <td>$10.3 T</td>
-        <td>$1.0 T</td>
-        <td style="color:#34d399;font-weight:600">$0.24 T</td>
-        <td style="color:#fbbf24;font-weight:600">0.056%</td>
-      </tr>
-      <tr>
-        <td>Q4 2020</td>
-        <td>$507.1 T</td>
-        <td>$219.3 T</td>
-        <td>$99.1 T</td>
-        <td>$26.9 T</td>
-        <td>$100.4 T</td>
-        <td>$73.2 T</td>
-        <td>$12.9 T</td>
-        <td>$1.3 T</td>
-        <td style="color:#34d399;font-weight:600">$0.89 T</td>
-        <td style="color:#fbbf24;font-weight:600">0.175%</td>
-      </tr>
-      <tr>
-        <td>Q4 2021</td>
-        <td>$594.8 T</td>
-        <td>$266.1 T</td>
-        <td>$123.4 T</td>
-        <td>$33.4 T</td>
-        <td>$107.4 T</td>
-        <td>$82.5 T</td>
-        <td>$12.5 T</td>
-        <td>$1.2 T</td>
-        <td style="color:#34d399;font-weight:600">$1.63 T</td>
-        <td style="color:#fbbf24;font-weight:600">0.274%</td>
-      </tr>
-      <tr>
-        <td>Q4 2022</td>
-        <td>$594.8 T</td>
-        <td>$284.8 T</td>
-        <td>$99.0 T</td>
-        <td>$26.8 T</td>
-        <td>$113.2 T</td>
-        <td>$83.7 T</td>
-        <td>$12.5 T</td>
-        <td>$1.0 T</td>
-        <td style="color:#34d399;font-weight:600">$0.58 T</td>
-        <td style="color:#fbbf24;font-weight:600">0.098%</td>
-      </tr>
-      <tr>
-        <td>Q4 2023</td>
-        <td>$640.2 T</td>
-        <td>$304.2 T</td>
-        <td>$119.0 T</td>
-        <td>$32.2 T</td>
-        <td>$119.2 T</td>
-        <td>$80.9 T</td>
-        <td>$14.2 T</td>
-        <td>$1.2 T</td>
-        <td style="color:#34d399;font-weight:600">$1.50 T</td>
-        <td style="color:#fbbf24;font-weight:600">0.235%</td>
-      </tr>
-      <tr>
-        <td>Q4 2024</td>
-        <td>$692.8 T</td>
-        <td>$318.9 T</td>
-        <td>$143.2 T</td>
-        <td>$38.8 T</td>
-        <td>$124.4 T</td>
-        <td>$83.2 T</td>
-        <td>$18.0 T</td>
-        <td>$1.8 T</td>
-        <td style="color:#34d399;font-weight:600">$3.37 T</td>
-        <td style="color:#fbbf24;font-weight:600">0.486%</td>
-      </tr>
-      <tr>
-        <td>Q4 2025</td>
-        <td>$749.9 T</td>
-        <td>$325.5 T</td>
-        <td>$168.5 T</td>
-        <td>$45.7 T</td>
-        <td>$132.2 T</td>
-        <td>$86.8 T</td>
-        <td>$31.1 T</td>
-        <td>$2.6 T</td>
-        <td style="color:#34d399;font-weight:600">$3.19 T</td>
-        <td style="color:#fbbf24;font-weight:600">0.425%</td>
-      </tr>
-      <tr>
-        <td>Q2 2026</td>
-        <td>$789.9 T</td>
-        <td>$338.6 T</td>
-        <td>$191.7 T</td>
-        <td>$52.0 T</td>
-        <td>$136.7 T</td>
-        <td>$88.8 T</td>
-        <td>$28.0 T</td>
-        <td>$4.0 T</td>
-        <td style="color:#34d399;font-weight:600">$2.17 T</td>
-        <td style="color:#fbbf24;font-weight:600">0.275%</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="footer">
+    BottomScreenr SCR v10 &middot; Macro Asset Market Cap Database &middot; 
+    <a href="https://github.com/onchaincycle/scr-dashboard" target="_blank">GitHub Repository</a>
+  </div>
 </div>
 
 <script>
@@ -361,13 +546,13 @@ function renderChart(mode) {
       data: {
         labels: DATA.labels,
         datasets: [
-          { label: 'Aset Kripto', data: DATA.crypto, backgroundColor: 'rgba(16, 185, 129, 0.8)', borderColor: '#10b981', fill: true, tension: 0.2 },
-          { label: 'Perak Fisik', data: DATA.silver, backgroundColor: 'rgba(161, 161, 170, 0.7)', borderColor: '#a1a1aa', fill: true, tension: 0.2 },
-          { label: 'Emas Fisik', data: DATA.gold, backgroundColor: 'rgba(234, 179, 8, 0.8)', borderColor: '#eab308', fill: true, tension: 0.2 },
-          { label: 'Uang M2 (Kas)', data: DATA.m2, backgroundColor: 'rgba(100, 116, 139, 0.7)', borderColor: '#64748b', fill: true, tension: 0.2 },
-          { label: 'Utang & Obligasi', data: DATA.debt, backgroundColor: 'rgba(139, 92, 246, 0.7)', borderColor: '#8b5cf6', fill: true, tension: 0.2 },
-          { label: 'Pasar Saham', data: DATA.eq, backgroundColor: 'rgba(59, 130, 246, 0.7)', borderColor: '#3b82f6', fill: true, tension: 0.2 },
-          { label: 'Real Estate', data: DATA.re, backgroundColor: 'rgba(245, 158, 11, 0.7)', borderColor: '#f59e0b', fill: true, tension: 0.2 },
+          { label: 'Aset Kripto', data: DATA.crypto, backgroundColor: 'rgba(16, 185, 129, 0.85)', borderColor: '#10b981', fill: true, tension: 0.25 },
+          { label: 'Perak Fisik', data: DATA.silver, backgroundColor: 'rgba(203, 213, 225, 0.75)', borderColor: '#cbd5e1', fill: true, tension: 0.25 },
+          { label: 'Emas Fisik', data: DATA.gold, backgroundColor: 'rgba(251, 191, 36, 0.85)', borderColor: '#fbbf24', fill: true, tension: 0.25 },
+          { label: 'Uang M2 (Kas)', data: DATA.m2, backgroundColor: 'rgba(100, 116, 139, 0.75)', borderColor: '#64748b', fill: true, tension: 0.25 },
+          { label: 'Utang & Obligasi', data: DATA.debt, backgroundColor: 'rgba(168, 85, 247, 0.75)', borderColor: '#a855f7', fill: true, tension: 0.25 },
+          { label: 'Pasar Saham', data: DATA.eq, backgroundColor: 'rgba(56, 189, 248, 0.75)', borderColor: '#38bdf8', fill: true, tension: 0.25 },
+          { label: 'Real Estate', data: DATA.re, backgroundColor: 'rgba(245, 158, 11, 0.75)', borderColor: '#f59e0b', fill: true, tension: 0.25 },
         ]
       },
       options: {
@@ -375,24 +560,41 @@ function renderChart(mode) {
         maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: { position: 'top', labels: { color: '#94a3b8', font: { size: 10 }, boxWidth: 12 } },
+          legend: {
+            position: 'top',
+            labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' }, boxWidth: 14, padding: 14 }
+          },
           tooltip: {
+            backgroundColor: '#0f1118',
+            titleColor: '#fff',
+            bodyColor: '#cbd5e1',
+            borderColor: 'rgba(255,255,255,0.15)',
+            borderWidth: 1,
+            padding: 12,
             callbacks: {
               label: (c) => ` ${c.dataset.label}: $${c.parsed.y.toLocaleString()} T`,
               footer: (items) => {
                 const sum = items.reduce((a, b) => a + b.parsed.y, 0);
-                return `Total Terukur: $${sum.toFixed(1)} T`;
+                return `Total Kekayaan: $${sum.toFixed(1)} T`;
               }
             }
           }
         },
         scales: {
-          x: { stacked: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 9 }, maxTicksLimit: 14 } },
+          x: {
+            stacked: true,
+            grid: { color: 'rgba(255,255,255,0.06)' },
+            ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 10 }, maxTicksLimit: 14 }
+          },
           y: {
             stacked: true,
-            grid: { color: 'rgba(255,255,255,0.05)' },
-            ticks: { color: '#94a3b8', font: { size: 10 }, callback: (v) => '$' + v + 'T' },
-            title: { display: true, text: 'Triliun USD ($T)', color: '#94a3b8', font: { size: 10 } }
+            grid: { color: 'rgba(255,255,255,0.06)' },
+            ticks: {
+              color: '#94a3b8',
+              font: { family: 'JetBrains Mono', size: 11 },
+              callback: (v) => '$' + v + 'T'
+            },
+            title: { display: true, text: 'Triliun USD ($T)', color: '#64748b', font: { size: 11 } }
           }
         }
       }
@@ -404,11 +606,11 @@ function renderChart(mode) {
         labels: DATA.labels,
         datasets: [
           { label: 'Aset Kripto (%)', data: DATA.sh_crypto, backgroundColor: '#10b981' },
-          { label: 'Perak Fisik (%)', data: DATA.sh_silver, backgroundColor: '#a1a1aa' },
-          { label: 'Emas Fisik (%)', data: DATA.sh_gold, backgroundColor: '#eab308' },
+          { label: 'Perak Fisik (%)', data: DATA.sh_silver, backgroundColor: '#cbd5e1' },
+          { label: 'Emas Fisik (%)', data: DATA.sh_gold, backgroundColor: '#fbbf24' },
           { label: 'Uang M2 (%)', data: DATA.sh_m2, backgroundColor: '#64748b' },
-          { label: 'Obligasi (%)', data: DATA.sh_debt, backgroundColor: '#8b5cf6' },
-          { label: 'Pasar Saham (%)', data: DATA.sh_eq, backgroundColor: '#3b82f6' },
+          { label: 'Obligasi (%)', data: DATA.sh_debt, backgroundColor: '#a855f7' },
+          { label: 'Pasar Saham (%)', data: DATA.sh_eq, backgroundColor: '#38bdf8' },
           { label: 'Real Estate (%)', data: DATA.sh_re, backgroundColor: '#f59e0b' },
         ]
       },
@@ -417,21 +619,38 @@ function renderChart(mode) {
         maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: { position: 'top', labels: { color: '#94a3b8', font: { size: 10 }, boxWidth: 12 } },
+          legend: {
+            position: 'top',
+            labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' }, boxWidth: 14, padding: 14 }
+          },
           tooltip: {
+            backgroundColor: '#0f1118',
+            titleColor: '#fff',
+            bodyColor: '#cbd5e1',
+            borderColor: 'rgba(255,255,255,0.15)',
+            borderWidth: 1,
+            padding: 12,
             callbacks: {
               label: (c) => ` ${c.dataset.label}: ${c.parsed.y.toFixed(2)}%`
             }
           }
         },
         scales: {
-          x: { stacked: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 9 }, maxTicksLimit: 14 } },
+          x: {
+            stacked: true,
+            grid: { color: 'rgba(255,255,255,0.06)' },
+            ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 10 }, maxTicksLimit: 14 }
+          },
           y: {
             stacked: true,
             max: 100,
-            grid: { color: 'rgba(255,255,255,0.05)' },
-            ticks: { color: '#94a3b8', font: { size: 10 }, callback: (v) => v + '%' },
-            title: { display: true, text: 'Pangsa Pasar (100% Normalized)', color: '#94a3b8', font: { size: 10 } }
+            grid: { color: 'rgba(255,255,255,0.06)' },
+            ticks: {
+              color: '#94a3b8',
+              font: { family: 'JetBrains Mono', size: 11 },
+              callback: (v) => v + '%'
+            },
+            title: { display: true, text: 'Pangsa Pasar (100% Normalized)', color: '#64748b', font: { size: 11 } }
           }
         }
       }
@@ -442,10 +661,10 @@ function renderChart(mode) {
       data: {
         labels: DATA.labels,
         datasets: [
-          { label: 'S&P 500 Market Cap', data: DATA.sp500, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', borderWidth: 2.5, tension: 0.2 },
-          { label: 'Emas Fisik Mcap', data: DATA.gold, borderColor: '#eab308', backgroundColor: 'rgba(234,179,8,0.1)', borderWidth: 2.5, tension: 0.2 },
-          { label: 'Perak Fisik Mcap', data: DATA.silver, borderColor: '#a1a1aa', backgroundColor: 'rgba(161,161,170,0.1)', borderWidth: 2, tension: 0.2 },
-          { label: 'Kripto Total Mcap', data: DATA.crypto, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.2)', borderWidth: 2.5, tension: 0.2 }
+          { label: 'S&P 500 Market Cap', data: DATA.sp500, borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.1)', borderWidth: 3, tension: 0.25 },
+          { label: 'Emas Fisik Mcap', data: DATA.gold, borderColor: '#fbbf24', backgroundColor: 'rgba(251,191,36,0.1)', borderWidth: 3, tension: 0.25 },
+          { label: 'Perak Fisik Mcap', data: DATA.silver, borderColor: '#cbd5e1', backgroundColor: 'rgba(203,213,225,0.1)', borderWidth: 2, tension: 0.25 },
+          { label: 'Kripto Total Mcap', data: DATA.crypto, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.2)', borderWidth: 3, tension: 0.25 }
         ]
       },
       options: {
@@ -453,19 +672,35 @@ function renderChart(mode) {
         maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: { position: 'top', labels: { color: '#94a3b8', font: { size: 10 }, boxWidth: 12 } },
+          legend: {
+            position: 'top',
+            labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' }, boxWidth: 14, padding: 14 }
+          },
           tooltip: {
+            backgroundColor: '#0f1118',
+            titleColor: '#fff',
+            bodyColor: '#cbd5e1',
+            borderColor: 'rgba(255,255,255,0.15)',
+            borderWidth: 1,
+            padding: 12,
             callbacks: {
               label: (c) => ` ${c.dataset.label}: $${c.parsed.y.toLocaleString()} T`
             }
           }
         },
         scales: {
-          x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 9 }, maxTicksLimit: 14 } },
+          x: {
+            grid: { color: 'rgba(255,255,255,0.06)' },
+            ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 10 }, maxTicksLimit: 14 }
+          },
           y: {
-            grid: { color: 'rgba(255,255,255,0.05)' },
-            ticks: { color: '#94a3b8', font: { size: 10 }, callback: (v) => '$' + v + 'T' },
-            title: { display: true, text: 'Triliun USD ($T)', color: '#94a3b8', font: { size: 10 } }
+            grid: { color: 'rgba(255,255,255,0.06)' },
+            ticks: {
+              color: '#94a3b8',
+              font: { family: 'JetBrains Mono', size: 11 },
+              callback: (v) => '$' + v + 'T'
+            },
+            title: { display: true, text: 'Triliun USD ($T)', color: '#64748b', font: { size: 11 } }
           }
         }
       }

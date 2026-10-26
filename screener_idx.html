@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Screener Akumulasi Dasar Saham Indonesia (SCR-IDX) | SCR v10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-base: #08090d;
+    --bg-surface: #0f1118;
+    --bg-card: #141722;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-prominent: rgba(255, 255, 255, 0.16);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent-blue: #38bdf8;
+    --accent-emerald: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-rose: #f43f5e;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 24px 20px;
+    background-color: #08090d;
+    background-image: 
+      radial-gradient(at 10% 10%, rgba(16, 185, 129, 0.07) 0px, transparent 40%),
+      radial-gradient(at 90% 90%, rgba(56, 189, 248, 0.07) 0px, transparent 40%);
+    background-attachment: fixed;
+    color: #f8fafc;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 1240px; margin: 0 auto; }
+
+  /* Navigation */
+  .top-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);
+  }
+  .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+  .brand-logo {
+    width: 34px; height: 34px; background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 9px; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; color: #08090d; font-size: 17px; box-shadow: 0 2px 12px rgba(16, 185, 129, 0.35);
+  }
+  .nav-links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .nav-link {
+    color: var(--text-secondary); text-decoration: none; font-size: 13px; font-weight: 500;
+    padding: 6px 14px; border-radius: 99px; border: 1px solid var(--border-subtle);
+    background: rgba(255, 255, 255, 0.03); transition: all 0.2s ease;
+  }
+  .nav-link:hover, .nav-link.active { color: #fff; border-color: var(--border-prominent); background: rgba(255, 255, 255, 0.08); }
+
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border-subtle);
+    border-radius: 16px; padding: 24px; margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Header */
+  .header-section { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+  .title-group h1 { font-size: 20px; font-weight: 800; margin: 0 0 6px 0; color: #fff; display: flex; align-items: center; gap: 10px; }
+  .title-group p { margin: 0; color: var(--text-secondary); font-size: 13px; }
+
+  /* Search and Controls */
+  .controls-bar {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+    gap: 12px; margin-bottom: 20px;
+  }
+  .search-input {
+    background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-subtle);
+    color: #fff; padding: 8px 16px; border-radius: 10px; font-size: 13px;
+    font-family: inherit; width: 280px; outline: none;
+  }
+  .search-input:focus { border-color: var(--accent-emerald); }
+
+  .btn-filter-group {
+    display: inline-flex; background: rgba(0, 0, 0, 0.5); padding: 4px; border-radius: 10px;
+    border: 1px solid var(--border-subtle); gap: 4px;
+  }
+  .btn-filter {
+    background: transparent; border: none; color: var(--text-secondary);
+    padding: 6px 14px; border-radius: 7px; font-size: 12px; font-weight: 600;
+    font-family: inherit; cursor: pointer; transition: all 0.2s ease;
+  }
+  .btn-filter:hover { color: #fff; }
+  .btn-filter.active {
+    background: linear-gradient(135deg, #10b981, #059669); color: #08090d;
+    font-weight: 700; box-shadow: 0 2px 12px rgba(16, 185, 129, 0.35);
+  }
+
+  /* KPI Grid */
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;
+    margin-bottom: 24px;
+  }
+  .kpi-box {
+    background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-subtle);
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .kpi-head { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; }
+  .kpi-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .kpi-num { font-size: 22px; font-weight: 800; color: #fff; margin: 6px 0 2px 0; font-family: 'JetBrains Mono', monospace; }
+  .kpi-sub { font-size: 12px; color: var(--text-muted); }
+
+  /* Table */
+  .table-responsive { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    text-align: right; padding: 11px 12px; color: var(--text-secondary); font-weight: 600;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-subtle); background: rgba(0, 0, 0, 0.25);
+  }
+  th:first-child, th:nth-child(2), th:nth-child(3) { text-align: left; }
+  td {
+    text-align: right; padding: 12px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary); font-family: 'JetBrains Mono', monospace;
+  }
+  td:first-child { text-align: left; font-family: inherit; font-weight: 800; color: #fff; font-size: 14px; }
+  td:nth-child(2) { text-align: left; font-family: inherit; font-weight: 600; color: var(--text-primary); }
+  td:nth-child(3) { text-align: left; font-family: inherit; font-size: 12px; color: var(--text-muted); }
+  tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+  /* Badges */
+  .pill {
+    display: inline-block; padding: 3px 10px; border-radius: 99px;
+    font-size: 11px; font-weight: 700; white-space: nowrap; font-family: inherit;
+  }
+  .pill-entry { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+  .pill-watch { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+  .pill-avoid { background: rgba(244, 63, 94, 0.12); color: #f87171; border: 1px solid rgba(244, 63, 94, 0.3); }
+
+  .footer {
+    text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 32px; padding-bottom: 24px;
+  }
+  .footer a { color: var(--accent-blue); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Navigation -->
+  <div class="top-nav">
+    <a class="nav-brand" href="index.html">
+      <div class="brand-logo">🇮🇩</div>
+      <div>
+        <strong style="font-size: 15px; display: block;">BottomScreenr SCR v10</strong>
+        <span style="font-size: 11px; color: var(--text-secondary);">Screener Akumulasi Dasar Saham Indonesia (SCR-IDX)</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">← Beranda SCR</a>
+      <a class="nav-link" href="chart_market_cap_10y.html">Market Cap 10Y</a>
+      <a class="nav-link" href="chart_intermarket_ratios.html">Rasio Makro</a>
+      <a class="nav-link active" href="screener_idx.html">Screener Saham IDX</a>
+      <a class="nav-link" href="chart_fed_liquidity.html">Fed Liquidity</a>
+    </div>
+  </div>
+
+  <!-- KPI Summary -->
+  <div class="kpi-grid">
+    <div class="kpi-box" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.08);">
+      <div class="kpi-head" style="color:#34d399"><span class="kpi-dot" style="background:#10b981"></span> Siap Akumulasi / Breakout</div>
+      <div class="kpi-num" style="color:#34d399">4 Emiten</div>
+      <div class="kpi-sub" style="color:#a7f3d0">ANTM, INTP, AMMN, ITMG (P4-P5)</div>
+    </div>
+    <div class="kpi-box" style="border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.08);">
+      <div class="kpi-head" style="color:#fbbf24"><span class="kpi-dot" style="background:#f59e0b"></span> Siaga & Watchlist</div>
+      <div class="kpi-num" style="color:#fbbf24">15 Emiten</div>
+      <div class="kpi-sub" style="color:#fde68a">TPIA, BBRI, KLBF, PTBA, BBCA, dll.</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-head"><span class="kpi-dot" style="background:#f43f5e"></span> Hindari / Pisau Jatuh</div>
+      <div class="kpi-num">20 Emiten</div>
+      <div class="kpi-sub">Gagal Crash Gate / Distribusi P1/P7</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-head"><span class="kpi-dot" style="background:#38bdf8"></span> Total Semesta Dipindai</div>
+      <div class="kpi-num">39 Emiten</div>
+      <div class="kpi-sub">Bluechip LQ45 / IDX30 25 Tahun</div>
+    </div>
+  </div>
+
+  <!-- Main Card -->
+  <div class="card">
+    <div class="header-section">
+      <div class="title-group">
+        <h1>📊 Hasil Screening Akumulasi Dasar LQ45 & IDX30</h1>
+        <p>Model Kuat Kuantitatif: Base Maturity Score (BMS) &ge; 50, Volume Absorption (VAS), Wyckoff Phase, dan Filter Anti-Crash Gate</p>
+      </div>
+    </div>
+
+    <div class="controls-bar">
+      <input type="text" id="searchInput" class="search-input" placeholder="Cari ticker, emiten, atau sektor..." onkeyup="filterTable()">
+      <div class="btn-filter-group">
+        <button class="btn-filter active" onclick="setCategory('all')">Semua (39)</button>
+        <button class="btn-filter" onclick="setCategory('entry')">Entry (4)</button>
+        <button class="btn-filter" onclick="setCategory('watch')">Watchlist (15)</button>
+        <button class="btn-filter" onclick="setCategory('avoid')">Hindari (20)</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table id="stockTable">
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Nama Emiten</th>
+            <th>Sektor</th>
+            <th>Harga</th>
+            <th>DD 52w</th>
+            <th>BMS</th>
+            <th>Serapan Vol</th>
+            <th>Trigger</th>
+            <th>Total Skor</th>
+            <th>Fase Wyckoff</th>
+            <th style="text-align:center">Rekomendasi Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    BottomScreenr SCR v10 &middot; SCR-IDX Quantitative Stock Screener &middot; 
+    <a href="https://github.com/onchaincycle/scr-dashboard" target="_blank">GitHub Repository</a>
+  </div>
+</div>
+
+<script>
+const STOCKS = [{"ticker": "TPIA", "emiten": "Chandra Asri Pacific Tbk", "sektor": "Petrokimia", "close": "1,205", "dd52": "-84.1%", "bms": "69", "vas": "72", "trig": "15", "skor": "65.1", "wyckoff": "P3 Accumulation", "aksi": "SIAGA (Pantau Ketat)", "cat": "watch"}, {"ticker": "BBRI", "emiten": "Bank Rakyat Indonesia Tbk", "sektor": "Keuangan", "close": "2,640", "dd52": "-28.1%", "bms": "59", "vas": "80", "trig": "15", "skor": "63.5", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "ANTM", "emiten": "Aneka Tambang Tbk", "sektor": "Tambang Mineral & Emas", "close": "2,550", "dd52": "-37.1%", "bms": "68", "vas": "64", "trig": "15", "skor": "62.9", "wyckoff": "P4 Supply Absorption", "aksi": "SCOUT ENTRY (E1 - 30%)", "cat": "entry"}, {"ticker": "INTP", "emiten": "Indocement Tunggal Prakarsa Tbk", "sektor": "Semen & Bahan Bangunan", "close": "5,150", "dd52": "-23.1%", "bms": "79", "vas": "82", "trig": "50", "skor": "62.0", "wyckoff": "P5 Demand Trigger", "aksi": "BREAKOUT ENTRY (C1)", "cat": "entry"}, {"ticker": "KLBF", "emiten": "Kalbe Farma Tbk", "sektor": "Kesehatan & Farmasi", "close": "675", "dd52": "-45.6%", "bms": "68", "vas": "62", "trig": "0", "skor": "59.5", "wyckoff": "P3 Accumulation", "aksi": "SIAGA (Pantau Ketat)", "cat": "watch"}, {"ticker": "AMMN", "emiten": "Amman Mineral Internasional Tbk", "sektor": "Tambang Tembaga & Emas", "close": "3,740", "dd52": "-54.1%", "bms": "66", "vas": "88", "trig": "0", "skor": "58.6", "wyckoff": "P4 Supply Absorption", "aksi": "SCOUT ENTRY (E1 - 30%)", "cat": "entry"}, {"ticker": "AMRT", "emiten": "Sumber Alfaria Trijaya Tbk", "sektor": "Ritel & Konsumer", "close": "1,055", "dd52": "-49.5%", "bms": "64", "vas": "48", "trig": "15", "skor": "57.5", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "ITMG", "emiten": "Indo Tambangraya Megah Tbk", "sektor": "Energi & Batubara", "close": "23,000", "dd52": "-17.0%", "bms": "77", "vas": "82", "trig": "15", "skor": "57.5", "wyckoff": "P4 Supply Absorption", "aksi": "SCOUT ENTRY (E1 - 30%)", "cat": "entry"}, {"ticker": "PTBA", "emiten": "Bukit Asam Tbk", "sektor": "Energi & Batubara", "close": "2,800", "dd52": "-15.2%", "bms": "55", "vas": "76", "trig": "75", "skor": "57.2", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "SMGR", "emiten": "Semen Indonesia Tbk", "sektor": "Semen & Bahan Bangunan", "close": "1,360", "dd52": "-55.0%", "bms": "56", "vas": "59", "trig": "15", "skor": "57.1", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "UNVR", "emiten": "Unilever Indonesia Tbk", "sektor": "Konsumer Non-Primer", "close": "1,390", "dd52": "-46.1%", "bms": "60", "vas": "48", "trig": "15", "skor": "56.2", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "BBNI", "emiten": "Bank Negara Indonesia Tbk", "sektor": "Keuangan", "close": "2,970", "dd52": "-29.9%", "bms": "43", "vas": "72", "trig": "15", "skor": "56.1", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "TBIG", "emiten": "Tower Bersama Infrastructure Tbk", "sektor": "Infrastruktur Telco", "close": "1,185", "dd52": "-52.9%", "bms": "60", "vas": "48", "trig": "15", "skor": "56.0", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "CPIN", "emiten": "Charoen Pokphand Indonesia Tbk", "sektor": "Pakan Ternak & Poultry", "close": "2,560", "dd52": "-48.0%", "bms": "48", "vas": "72", "trig": "0", "skor": "55.0", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "ASII", "emiten": "Astra International Tbk", "sektor": "Otomotif & Industri", "close": "4,190", "dd52": "-36.3%", "bms": "52", "vas": "55", "trig": "15", "skor": "54.9", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "PGAS", "emiten": "Perusahaan Gas Negara Tbk", "sektor": "Energi Gas", "close": "1,190", "dd52": "-46.3%", "bms": "47", "vas": "61", "trig": "15", "skor": "54.8", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "AKRA", "emiten": "AKR Corporindo Tbk", "sektor": "Logistik & Energi", "close": "1,250", "dd52": "-17.8%", "bms": "63", "vas": "86", "trig": "15", "skor": "54.4", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "BBCA", "emiten": "Bank Central Asia Tbk", "sektor": "Keuangan", "close": "5,175", "dd52": "-36.9%", "bms": "53", "vas": "53", "trig": "15", "skor": "53.1", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "MIKA", "emiten": "Mitra Keluarga Karyasehat Tbk", "sektor": "Kesehatan & RS", "close": "1,475", "dd52": "-42.6%", "bms": "56", "vas": "52", "trig": "0", "skor": "52.6", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "ISAT", "emiten": "Indosat Ooredoo Hutchison Tbk", "sektor": "Telekomunikasi", "close": "1,755", "dd52": "-35.5%", "bms": "72", "vas": "30", "trig": "0", "skor": "52.1", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "BMRI", "emiten": "Bank Mandiri Tbk", "sektor": "Keuangan", "close": "3,390", "dd52": "-29.0%", "bms": "40", "vas": "59", "trig": "15", "skor": "51.9", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "MDKA", "emiten": "Merdeka Copper Gold Tbk", "sektor": "Tambang Emas & Tembaga", "close": "2,430", "dd52": "-34.9%", "bms": "62", "vas": "66", "trig": "0", "skor": "51.7", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "JSMR", "emiten": "Jasa Marga Tbk", "sektor": "Infrastruktur Jalan Tol", "close": "2,110", "dd52": "-42.1%", "bms": "42", "vas": "54", "trig": "15", "skor": "51.2", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "MEDC", "emiten": "Medco Energi Internasional Tbk", "sektor": "Minyak & Gas", "close": "1,290", "dd52": "-28.0%", "bms": "54", "vas": "80", "trig": "25", "skor": "51.2", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "ICBP", "emiten": "Indofood CBP Sukses Makmur Tbk", "sektor": "Konsumer Non-Primer", "close": "6,300", "dd52": "-25.6%", "bms": "62", "vas": "39", "trig": "15", "skor": "51.1", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "TOWR", "emiten": "Sarana Menara Nusantara Tbk", "sektor": "Infrastruktur Telco", "close": "388", "dd52": "-36.8%", "bms": "53", "vas": "68", "trig": "15", "skor": "50.4", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "AALI", "emiten": "Astra Agro Lestari Tbk", "sektor": "Perkebunan Sawit", "close": "7,825", "dd52": "-6.8%", "bms": "51", "vas": "64", "trig": "60", "skor": "49.8", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "TLKM", "emiten": "Telkom Indonesia Tbk", "sektor": "Telekomunikasi", "close": "1,900", "dd52": "-45.5%", "bms": "43", "vas": "40", "trig": "15", "skor": "48.1", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "MYOR", "emiten": "Mayora Indah Tbk", "sektor": "Konsumer Non-Primer", "close": "1,370", "dd52": "-41.3%", "bms": "48", "vas": "33", "trig": "0", "skor": "45.0", "wyckoff": "P1 Capitulation", "aksi": "HINDARI", "cat": "avoid"}, {"ticker": "INDF", "emiten": "Indofood Sukses Makmur Tbk", "sektor": "Konsumer Non-Primer", "close": "6,625", "dd52": "-11.1%", "bms": "71", "vas": "48", "trig": "15", "skor": "44.0", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "LSIP", "emiten": "PP London Sumatra Indonesia Tbk", "sektor": "Perkebunan Sawit", "close": "1,280", "dd52": "-24.7%", "bms": "52", "vas": "76", "trig": "0", "skor": "43.9", "wyckoff": "P2 Seller Exhaustion", "aksi": "WATCHLIST", "cat": "watch"}, {"ticker": "ADRO", "emiten": "Alamtri Resources Indonesia Tbk", "sektor": "Energi & Batubara", "close": "2,210", "dd52": "-18.8%", "bms": "38", "vas": "87", "trig": "0", "skor": "39.2", "wyckoff": "P7 Distribution", "aksi": "EXIT / KURANGI", "cat": "avoid"}, {"ticker": "BREN", "emiten": "Barito Renewables Energy Tbk", "sektor": "Energi Terbarukan", "close": "1,855", "dd52": "-81.4%", "bms": "56", "vas": "59", "trig": "15", "skor": "35.0", "wyckoff": "P1 Capitulation", "aksi": "HINDARI (Pisau Jatuh)", "cat": "avoid"}, {"ticker": "BRIS", "emiten": "Bank Syariah Indonesia Tbk", "sektor": "Keuangan", "close": "1,095", "dd52": "-57.3%", "bms": "32", "vas": "40", "trig": "0", "skor": "35.0", "wyckoff": "P1 Capitulation", "aksi": "HINDARI (Pisau Jatuh)", "cat": "avoid"}, {"ticker": "BRPT", "emiten": "Barito Pacific Tbk", "sektor": "Energi & Industri", "close": "1,210", "dd52": "-68.0%", "bms": "80", "vas": "70", "trig": "15", "skor": "35.0", "wyckoff": "P1 Capitulation", "aksi": "HINDARI (Pisau Jatuh)", "cat": "avoid"}, {"ticker": "EMTK", "emiten": "Elang Mahkota Teknologi Tbk", "sektor": "Teknologi & Media", "close": "334", "dd52": "-75.1%", "bms": "60", "vas": "27", "trig": "15", "skor": "35.0", "wyckoff": "P1 Capitulation", "aksi": "HINDARI (Pisau Jatuh)", "cat": "avoid"}, {"ticker": "EXCL", "emiten": "XL Axiata Tbk", "sektor": "Telekomunikasi", "close": "1,815", "dd52": "-58.4%", "bms": "52", "vas": "28", "trig": "15", "skor": "35.0", "wyckoff": "P1 Capitulation", "aksi": "HINDARI (Pisau Jatuh)", "cat": "avoid"}, {"ticker": "GOTO", "emiten": "GoTo Gojek Tokopedia Tbk", "sektor": "Teknologi Digital", "close": "25", "dd52": "-63.8%", "bms": "26", "vas": "40", "trig": "15", "skor": "35.0", "wyckoff": "P1 Capitulation", "aksi": "HINDARI (Pisau Jatuh)", "cat": "avoid"}, {"ticker": "INCO", "emiten": "Vale Indonesia Tbk", "sektor": "Tambang Nikel", "close": "3,450", "dd52": "-55.6%", "bms": "44", "vas": "54", "trig": "0", "skor": "35.0", "wyckoff": "P1 Capitulation", "aksi": "HINDARI (Pisau Jatuh)", "cat": "avoid"}];
+let currentCategory = 'all';
+
+function renderRows() {
+  const tbody = document.getElementById('tableBody');
+  const query = document.getElementById('searchInput').value.toLowerCase().trim();
+  
+  let filtered = STOCKS.filter(s => {
+    const matchCat = (currentCategory === 'all') || (s.cat === currentCategory);
+    const matchQuery = !query || s.ticker.toLowerCase().includes(query) || s.emiten.toLowerCase().includes(query) || s.sektor.toLowerCase().includes(query);
+    return matchCat && matchQuery;
+  });
+
+  let html = '';
+  filtered.forEach(s => {
+    let pillClass = 'pill-avoid';
+    if (s.cat === 'entry') pillClass = 'pill-entry';
+    else if (s.cat === 'watch') pillClass = 'pill-watch';
+
+    html += `<tr>
+      <td>${s.ticker}</td>
+      <td>${s.emiten}</td>
+      <td>${s.sektor}</td>
+      <td style="color:#fff; font-weight:700">Rp ${s.close}</td>
+      <td style="color:${s.dd52.startsWith('-') ? '#f87171' : '#34d399'}">${s.dd52}</td>
+      <td>${s.bms}</td>
+      <td>${s.vas}</td>
+      <td>${s.trig}</td>
+      <td style="color:#fff; font-weight:800">${s.skor}</td>
+      <td style="font-family:inherit; font-weight:600">${s.wyckoff}</td>
+      <td style="text-align:center"><span class="pill ${pillClass}">${s.aksi}</span></td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html;
+}
+
+function setCategory(cat) {
+  currentCategory = cat;
+  document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderRows();
+}
+
+function filterTable() {
+  renderRows();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderRows();
+});
+</script>
+
+</body>
+</html>
